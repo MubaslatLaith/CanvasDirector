@@ -1,6 +1,4 @@
-
 from typing import Any
-
 from contextmanager.apiclient.request import RequestClient
 
 
@@ -12,13 +10,7 @@ class Boards:
     def create_board(self, board_name: str) -> dict[str, Any]:
         raise NotImplementedError
 
-    def list_boards(
-        self,
-        *,
-        all: bool = True,
-        offset: int | None = None,
-        limit: int | None = None,
-    ) -> list[dict[str, Any]]:
+    def list_boards(self, all: bool = True, offset: int | None = None, limit: int | None = None) -> list[dict[str, Any]]:
         raise NotImplementedError
 
     def get_board(self, board_id: str) -> dict[str, Any]:
@@ -27,7 +19,6 @@ class Boards:
     def update_board(
         self,
         board_id: str,
-        *,
         board_name: str | None = None,
         archived: bool | None = None,
     ) -> dict[str, Any]:
@@ -45,19 +36,8 @@ class Boards:
     def remove_image_from_board(self, board_id: str, image_name: str) -> dict[str, Any]:
         raise NotImplementedError
 
-    def add_images_to_board(
-        self,
-        board_id: str,
-        image_names: list[str],
-    ) -> dict[str, Any]:
+    def add_images_to_board(self, board_id: str, image_names: list[str]) -> dict[str, Any]:
         raise NotImplementedError
 
-    def remove_images_from_board(
-        self,
-        board_id: str,
-        image_names: list[str],
-    ) -> dict[str, Any]:
+    def remove_images_from_board(self, board_id: str, image_names: list[str]) -> dict[str, Any]:
         raise NotImplementedError
-
-
-

@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "contextmanager"
+version = "0.1.0"
+description = "LLM-driven orchestration framework for image generation, editing, and workflow automation"
+authors = ["Laith Mubaslat"]
+readme = "README.md"
+
+packages = [
+    { include = "contextmanager", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+# Core
+pydantic = "^2.11"
+typing-extensions = "^4.14"
+
+# Networking
+httpx = "^0.28"
+
+# LLM APIs
+openai = "^1.100"
+anthropic = "^0.69"
+
+# Image processing
+pillow = "^11.3"
+numpy = "^2.3"
+
+# InvokeAI API client
+invoke-community-edition-client = { path = "src/apiclient", develop = true }
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4"
+pytest-asyncio = "^1.1"
+ruff = "^0.12"
+mypy = "^1.17"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

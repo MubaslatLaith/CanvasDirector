@@ -5,4 +5,12 @@ git config --global user.email "laithmbt@gmail.com"
 git config --global credential.helper store
 git init
 
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+
+pip install poetry
+poetry env use $(pwd)/.venv/bin/python
+poetry install
+
 

@@ -16,6 +16,9 @@ python -m pip install --upgrade pip setuptools wheel
 pip install poetry
 poetry env use $(pwd)/.venv/bin/python
 poetry install
+poetry run playwright install chromium
+
+
 
 cd .. 
 

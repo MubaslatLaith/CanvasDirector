@@ -33,6 +33,9 @@ pytest = "^8.4"
 pytest-asyncio = "^1.1"
 ruff = "^0.12"
 mypy = "^1.17"
+playwright = "^1.52"
+pytest-playwright = "^0.7"
+
 
 [tool.ruff]
 line-length = 120

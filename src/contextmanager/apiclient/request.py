@@ -43,7 +43,11 @@ class RequestClient:
         try:
             data = response.json()
         except Exception:
-            data = response.text
+            content_type = response.headers.get("content-type", "")
+            if content_type.startswith("image/"):
+                data = response.content
+            else:
+                data = response.text
 
         return APIResponse(
             status_code=response.status_code,

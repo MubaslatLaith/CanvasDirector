@@ -19,8 +19,8 @@ class Images:
     def get_image(self, image_name: str) -> dict[str, Any]:
         raise NotImplementedError
 
-    def get_images_by_names(self, image_names: list[str]) -> list[dict[str, Any]]:
-        raise NotImplementedError
+    def get_images_by_names(self, image_names: list[str]):
+        return self._request_client.get("/api/v1/images/", headers=self._auth_header_provider(), params={"image_names": image_names}) 
 
     def get_image_names(self, offset: int = 0, limit: int = 50) -> list[str]:
         raise NotImplementedError
@@ -34,9 +34,9 @@ class Images:
     def get_image_urls(self, image_name: str) -> dict[str, Any]:
         raise NotImplementedError
 
-    def get_full_image(self, image_name: str) -> bytes:
-        raise NotImplementedError
-
+    def get_full_image(self, image_name: str):
+        return self._request_client.get(f"/api/v1/images/i/{image_name}/full", headers=self._auth_header_provider()) 
+    
     def get_thumbnail(self, image_name: str) -> bytes:
         raise NotImplementedError
 

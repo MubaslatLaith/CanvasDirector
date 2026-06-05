@@ -7,14 +7,21 @@ class Boards:
         self._request_client = request_client
         self._auth_header_provider = auth_header_provider
 
-    def create_board(self, board_name: str) -> dict[str, Any]:
-        raise NotImplementedError
+    def create_board(self, board_name: str):
+        return self._request_client.post("/api/v1/boards/", params={"board_name": board_name}, headers=self._auth_header_provider())
 
-    def list_boards(self, all: bool = True, offset: int | None = None, limit: int | None = None) -> list[dict[str, Any]]:
-        raise NotImplementedError
+    def list_boards(self, all: bool = True, offset: int | None = None, limit: int | None = None):
+        params = {"all": all}
+        if offset is not None:
+            params["offset"] = offset
+        if limit is not None:
+            params["limit"] = limit
+        return self._request_client.get("/api/v1/boards/", headers=self._auth_header_provider(), params=params)
+    
 
-    def get_board(self, board_id: str) -> dict[str, Any]:
-        raise NotImplementedError
+    def get_board(self, board_id: str):
+        return self._request_client.get(f"/api/v1/boards/{board_id}", headers=self._auth_header_provider())
+    
 
     def update_board(
         self,
@@ -27,9 +34,9 @@ class Boards:
     def delete_board(self, board_id: str) -> dict[str, Any] | None:
         raise NotImplementedError
 
-    def list_board_image_names(self, board_id: str) -> list[str]:
-        raise NotImplementedError
-
+    def list_board_image_names(self, board_id: str):
+        return self._request_client.get(f"/api/v1/boards/{board_id}/image_names", headers=self._auth_header_provider())
+    
     def add_image_to_board(self, board_id: str, image_name: str) -> dict[str, Any]:
         raise NotImplementedError
 

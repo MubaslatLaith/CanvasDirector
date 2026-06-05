@@ -4,8 +4,8 @@ from contextmanager.apiclient.invokeai.client import InvokeAIClient
 
 
 def main():
-    email = "laithmbt@gmail.com"
-    password = "123" 
+    email = "email@email.email"
+    password = "weakpassword" 
     port = "9091"
     base_url = f"http://localhost:{port}" 
     

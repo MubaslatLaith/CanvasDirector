@@ -6,6 +6,19 @@ from contextmanager.apiclient.types import APIResponse
 class RequestClient:
     def __init__(self, base_url: str):
         self.base_url = base_url.rstrip("/")
+    
+
+    def get(self, endpoint: str, **kwargs) -> APIResponse:
+        return self.request("GET", endpoint, **kwargs)
+
+    def post(self, endpoint: str, **kwargs) -> APIResponse:
+        return self.request("POST", endpoint, **kwargs)
+
+    def patch(self, endpoint: str, **kwargs) -> APIResponse:
+        return self.request("PATCH", endpoint, **kwargs)
+
+    def delete(self, endpoint: str, **kwargs) -> APIResponse:
+        return self.request("DELETE", endpoint, **kwargs)
 
     def request(
         self,

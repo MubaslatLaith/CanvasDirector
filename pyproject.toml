@@ -27,8 +27,6 @@ anthropic = "^0.69"
 pillow = "^11.3"
 numpy = "^2.3"
 
-# InvokeAI API client
-invoke-community-edition-client = { path = "src/apiclient", develop = true }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4"

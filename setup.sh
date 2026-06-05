@@ -17,7 +17,7 @@ pip install poetry
 poetry env use $(pwd)/.venv/bin/python
 poetry install
 poetry run playwright install chromium
-
+poetry run playwright install-deps chromium
 
 
 cd .. 

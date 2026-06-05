@@ -15,25 +15,35 @@ class UIElement:
 
 import time
 
-def wait_until_dom_stable(page, stable_for=1.0, timeout=30):
-    start = time.time()
-    last_html = page.content()
-    last_change = time.time()
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, Error as PlaywrightError
+import time
 
-    while time.time() - start < timeout:
-        time.sleep(0.25)
+def wait_until_dom_stable(page, stable_ms=1000, poll_ms=250, timeout_ms=15000):
+    deadline = time.time() + timeout_ms / 1000
+    last_html = None
+    stable_since = None
 
-        html = page.content()
+    while time.time() < deadline:
+        try:
+            html = page.evaluate("document.documentElement.outerHTML")
+        except PlaywrightError:
+            stable_since = None
+            last_html = None
+            time.sleep(poll_ms / 1000)
+            continue
 
-        if html != last_html:
+        if html == last_html:
+            if stable_since is None:
+                stable_since = time.time()
+            if (time.time() - stable_since) * 1000 >= stable_ms:
+                return
+        else:
             last_html = html
-            last_change = time.time()
+            stable_since = None
 
-        if time.time() - last_change >= stable_for:
-            return
+        time.sleep(poll_ms / 1000)
 
-    raise TimeoutError("DOM never stabilized")
-
+    raise PlaywrightTimeoutError("DOM did not stabilize")
 
 def main():
     with sync_playwright() as p:

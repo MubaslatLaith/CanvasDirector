@@ -2,7 +2,7 @@ import time
 from pathlib import Path
 import json
 from playwright.sync_api import Page
-
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, Error as PlaywrightError
 
 class BasePage:
     def __init__(self, page: Page):

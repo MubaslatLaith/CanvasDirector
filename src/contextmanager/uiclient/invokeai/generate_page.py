@@ -6,6 +6,12 @@ class GeneratePage(BasePage):
     PROMPT_TEXT_BOX = "prompt"
 
     def update_prompt(self, prompt):
-        self.page.locator(f"textarea[name='{self.PROMPT_TEXT_BOX}']").fill(prompt)
-        value = self.page.locator(f"textarea[name='{self.PROMPT_TEXT_BOX}']").input_value()
-        print("Prompt value:", value)
+        prompt_box = self.page.locator("textarea[name='prompt']")
+
+        prompt_box.click()
+
+        prompt_box.press("Control+A")
+
+        prompt_box.press("Backspace")
+
+        prompt_box.type(prompt)

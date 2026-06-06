@@ -38,8 +38,8 @@ def main():
         upscaling_page = UpscalingPage(page)
 
         generate_page.select_page()
-        generate_page.update_prompt(prompt="125as94444") 
-        
+        generate_page.update_prompt(prompt="125as11111") 
+        generate_page.screenshot_page("generator_page_after.png")        
         #print(generate_page.page.content()) 
 
         page = generate_page.page

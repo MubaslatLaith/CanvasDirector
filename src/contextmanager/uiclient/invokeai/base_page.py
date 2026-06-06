@@ -12,6 +12,9 @@ class BasePage:
         self.page.get_by_test_id(self.PAGE_BUTTON).click()
         self.wait_until_dom_stable()
 
+    def screenshot_page(self, screenshot_path):
+        self.page.screenshot(path=screenshot_path, full_page=True)  
+
 
     def get_buttons(self):
         return self.page.get_by_role("button").all()

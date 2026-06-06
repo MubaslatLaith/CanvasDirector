@@ -9,7 +9,7 @@ class BasePage:
         self.page = page
 
     def select_page(self):
-        self.page.get_by_role("button", name=self.PAGE_BUTTON).click()
+        self.page.get_by_test_id(self.PAGE_BUTTON).click()
         self.wait_until_dom_stable()
 
 

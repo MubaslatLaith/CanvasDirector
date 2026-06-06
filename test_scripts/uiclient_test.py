@@ -38,11 +38,8 @@ def main():
         upscaling_page = UpscalingPage(page)
 
         generate_page.select_page()
-
-        #print("Textboxes:", page.get_by_role("textbox").count())
-        #base_page.save_elements_snapshot(snapshot_path)
-        #print(snapshot)
-        #print(f"Saved snapshot to {snapshot_path}")
+        canvas_page.select_page() 
+        upscaling_page.select_page() 
 
         browser.close()
 

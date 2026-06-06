@@ -9,7 +9,9 @@ class BasePage:
         self.page = page
 
     def select_page(self):
-        raise NotImplementedError("Each page stub should implement select_page().")
+        self.page.get_by_role("button", name=self.PAGE_BUTTON).click()
+        self.wait_until_dom_stable()
+
 
     def get_buttons(self):
         return self.page.get_by_role("button").all()

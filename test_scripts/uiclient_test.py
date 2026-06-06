@@ -3,6 +3,12 @@ from playwright.sync_api import sync_playwright
 
 from contextmanager.uiclient.invokeai.base_page import BasePage
 from contextmanager.uiclient.invokeai.login_page import LoginPage
+from contextmanager.uiclient.invokeai.generate_page import GeneratePage
+from contextmanager.uiclient.invokeai.canvas_page import CanvasPage
+from contextmanager.uiclient.invokeai.upscaling_page import UpscalingPage
+
+
+
 
 INVOKE_URL = "http://127.0.0.1:9091"
 USERNAME = "email@email.email"
@@ -27,10 +33,11 @@ def main():
         login_successful = login_page.validate_login()   
 
 
+        generate_page = GeneratePage(page) 
+        canvas_page = CanvasPage(page)
+        upscaling_page = UpscalingPage(page)
 
-
-
-
+        generate_page.select_page()
 
         #print("Textboxes:", page.get_by_role("textbox").count())
         #base_page.save_elements_snapshot(snapshot_path)

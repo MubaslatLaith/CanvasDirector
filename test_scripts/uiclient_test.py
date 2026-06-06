@@ -38,8 +38,22 @@ def main():
         upscaling_page = UpscalingPage(page)
 
         generate_page.select_page()
-        canvas_page.select_page() 
-        upscaling_page.select_page() 
+        generate_page.update_prompt(prompt="125as94444") 
+        
+        #print(generate_page.page.content()) 
+
+        page = generate_page.page
+        print("Textboxes:", page.get_by_role("textbox").count())
+        for i in range(page.get_by_role("textbox").count()):
+            textbox = page.get_by_role("textbox").nth(i)
+            print(i, textbox.evaluate("e => e.outerHTML"))
+
+
+
+
+
+        #canvas_page.select_page() 
+        #upscaling_page.select_page() 
 
         browser.close()
 

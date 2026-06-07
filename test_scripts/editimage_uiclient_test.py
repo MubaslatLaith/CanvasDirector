@@ -48,10 +48,12 @@ def main():
         #3 assign mask to edit / for now assigned manually (manually placed in image_to_edit_board assets)
         
         
-        generate_page = GeneratorPage(page) 
+        generate_page = GeneratePage(page) 
         canvas_page = CanvasPage(page)
         
         generate_page.select_page() 
+        board_name = "image_to_edit_board"
+        generate_page.select_board(board_name)
         #TODO select board: image_to_edit 
         canvas_page.select_page() 
         #TODO go to edit mode (click edit) - No need 
@@ -65,17 +67,20 @@ def main():
         #TODO select mask asset  - No need (automatically selected by prev step) 
         #TODO right click 
 
+        
+
+        """
         edit_prompt = "fix hands"
         canvas_page.update_prompt(prompt = edit_prompt)
 
         
         invoke = generate_page.page.get_by_role("button", name="Invoke", exact=True)
         
-        generate_page.screenshot_page("generator_page_after_update_prompt.png")        
-        generate_page.wait_until_dom_stable() 
+        canvas_page.screenshot_page("generator_page_after_update_prompt.png")        
+        canvas_page.wait_until_dom_stable() 
     
         browser.close()
-
+        """
 
 if __name__ == "__main__":
     main()

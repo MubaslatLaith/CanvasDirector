@@ -9,8 +9,11 @@ class BasePage:
         self.page = page
 
     def select_page(self):
-        self.page.get_by_test_id(self.PAGE_BUTTON).click()
-        self.wait_until_dom_stable()
+        self.click_button(self.PAGE_BUTTON)
+        self.wait_until_dom_stable():
+        
+    def click_button(self, button_name):
+        self.page.get_by_test_id(button_name).click() 
 
     def screenshot_page(self, screenshot_path):
         self.page.screenshot(path=screenshot_path, full_page=True)  

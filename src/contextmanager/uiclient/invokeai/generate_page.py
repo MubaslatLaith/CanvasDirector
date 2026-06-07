@@ -3,10 +3,12 @@ from contextmanager.uiclient.invokeai.base_page import BasePage
 
 class GeneratePage(BasePage):
     PAGE_BUTTON = "Generate"
-    PROMPT_TEXT_BOX = "prompt"
+    INVOKE_BUTTON = "Invoke" 
 
+    PROMPT_TEXT_BOX = "prompt"
+    
     def update_prompt(self, prompt):
-        prompt_box = self.page.locator("textarea[name='prompt']")
+        prompt_box = self.page.locator(f"textarea[name='{self.PROMPT_TEXT_BOX}']")
 
         prompt_box.click()
 
@@ -15,3 +17,8 @@ class GeneratePage(BasePage):
         prompt_box.press("Backspace")
 
         prompt_box.type(prompt)
+
+
+    def invoke(self):
+        self.page.get_by_role("button", name=self.INVOKE_BUTTON, exact=True).click()
+        #self.click_button(self.INVOKE_BUTTON) 

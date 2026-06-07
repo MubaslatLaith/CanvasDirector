@@ -9,18 +9,25 @@ class BasePage:
         self.page = page
 
     def select_page(self):
-        self.click_button(self.PAGE_BUTTON)
-        self.wait_until_dom_stable():
+        self.page.get_by_test_id(self.PAGE_BUTTON).click()
+        self.wait_until_dom_stable()
         
-    def click_button(self, button_name):
-        self.page.get_by_test_id(button_name).click() 
-
     def screenshot_page(self, screenshot_path):
         self.page.screenshot(path=screenshot_path, full_page=True)  
 
-
     def get_buttons(self):
-        return self.page.get_by_role("button").all()
+        result = []
+
+        for button in self.page.get_by_role("button").all():
+            result.append({
+                "text": button.inner_text(),
+                "aria_label": button.get_attribute("aria-label"),
+                "title": button.get_attribute("title"),
+                "id": button.get_attribute("id"),
+                "name": button.get_attribute("name"),
+            })
+
+        return result
 
     def get_text_boxes(self):
         return self.page.get_by_role("textbox").all()

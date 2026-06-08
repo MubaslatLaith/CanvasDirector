@@ -13,8 +13,6 @@ class GeneratePage(BasePage):
         prompt_box.press("Backspace")
         prompt_box.type(prompt)
 
-    def select_board(self, board_name):
-        pass 
 
 
     def invoke(self):

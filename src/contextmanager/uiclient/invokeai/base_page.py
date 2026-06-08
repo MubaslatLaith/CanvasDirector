@@ -11,7 +11,11 @@ class BasePage:
     def select_page(self):
         self.page.get_by_test_id(self.PAGE_BUTTON).click()
         self.wait_until_dom_stable()
-        
+
+    def select_board(self, board_name):
+        pass 
+
+
     def screenshot_page(self, screenshot_path):
         self.page.screenshot(path=screenshot_path, full_page=True)  
 

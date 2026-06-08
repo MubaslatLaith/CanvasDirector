@@ -51,9 +51,31 @@ def main():
         generate_page = GeneratePage(page) 
         canvas_page = CanvasPage(page)
         
+        canvas_page.select_page()
+        #canvas_page.wait_until_dom_stable()
+        #canvas_page.save_html("canvas.html")
+        #import pdb; pdb.set_trace()
+
+
+        board_name = "Uncategorized" 
+        canvas_page.select_board(board_name) 
+        canvas_page.screenshot_page("board_uncat.png")
+
+
+        board_name = "image_to_edit_board" 
+        canvas_page.select_board(board_name)
+        canvas_page.screenshot_page("board_i2e.png")
+        canvas_page.op_over_selected_board_image(board_name)
+        canvas_page.wait_until_dom_stable()
+        canvas_page.screenshot_page("new_canvas.png")
+        #canvas_page.select_page() 
+        #canvas_page.screenshot_page("before_canvas_reset.png") 
+
+
+
+        """
         generate_page.select_page() 
-        
-        
+         
         board_name = "Uncategorized"
         generate_page.select_page() 
         #generate_page.debug_board(board_name)
@@ -72,6 +94,8 @@ def main():
         generate_page.wait_until_dom_stable() 
         canvas_page.select_page()
         generate_page.screenshot_page("select_board_image_to_edit.png")
+        """
+
 
         #TODO select board: image_to_edit 
         canvas_page.select_page() 

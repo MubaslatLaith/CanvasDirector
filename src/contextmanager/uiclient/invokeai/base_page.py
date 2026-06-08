@@ -12,6 +12,11 @@ class BasePage:
         self.page.get_by_test_id(self.PAGE_BUTTON).click()
         self.wait_until_dom_stable()
 
+    def save_html(self, path):
+        html = self.page.content()
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(html)
+
     def debug_board(self, board_name):
         matches = self.page.get_by_text(board_name, exact=True)
 

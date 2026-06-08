@@ -12,10 +12,24 @@ class BasePage:
         self.page.get_by_test_id(self.PAGE_BUTTON).click()
         self.wait_until_dom_stable()
 
+    def debug_board(self, board_name):
+        matches = self.page.get_by_text(board_name, exact=True)
+
+        print("count:", matches.count())
+
+        for i in range(matches.count()):
+            print("=" * 80)
+            print(matches.nth(i).evaluate("e => e.outerHTML"))
+
     def select_board(self, board_name):
-        pass 
+        button = self.page.locator("button").filter(has_text=board_name)
 
+        if button.count() > 0:
+            button.first.click()
+        else:
+            self.page.get_by_text(board_name, exact=True).click()
 
+        self.wait_until_dom_stable()
     def screenshot_page(self, screenshot_path):
         self.page.screenshot(path=screenshot_path, full_page=True)  
 

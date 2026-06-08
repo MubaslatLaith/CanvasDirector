@@ -54,8 +54,8 @@ def main():
             print("HTML:", button.evaluate("e => e.outerHTML"))
             print()
         """
-        #generate_page_buttons = generate_page.get_buttons() 
-        #import pdb; pdb.set_trace()
+        generate_page_buttons = generate_page.get_buttons() 
+        import pdb; pdb.set_trace()
 
         invoke = generate_page.page.get_by_role("button", name="Invoke", exact=True)
         print(invoke.get_attribute("data-testid"))

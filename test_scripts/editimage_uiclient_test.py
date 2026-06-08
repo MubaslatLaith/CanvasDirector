@@ -52,8 +52,27 @@ def main():
         canvas_page = CanvasPage(page)
         
         generate_page.select_page() 
-        board_name = "image_to_edit_board"
+        
+        
+        board_name = "Uncategorized"
+        generate_page.select_page() 
+        #generate_page.debug_board(board_name)
         generate_page.select_board(board_name)
+        generate_page.wait_until_dom_stable() 
+        canvas_page.select_page() 
+        generate_page.screenshot_page("select_board_uncategorized.png")
+        
+
+
+
+        board_name = "image_to_edit_board"
+        generate_page.select_page() 
+        generate_page.select_board(board_name)
+        #generate_page.debug_board(board_name)
+        generate_page.wait_until_dom_stable() 
+        canvas_page.select_page()
+        generate_page.screenshot_page("select_board_image_to_edit.png")
+
         #TODO select board: image_to_edit 
         canvas_page.select_page() 
         #TODO go to edit mode (click edit) - No need 

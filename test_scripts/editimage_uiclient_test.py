@@ -63,10 +63,13 @@ def main():
 
 
         board_name = "image_to_edit_board" 
-        canvas_page.select_board(board_name)
+        #canvas_page.select_board(board_name)
         canvas_page.screenshot_page("board_i2e.png")
-        canvas_page.op_over_selected_board_image(board_name)
+        #canvas_page.op_over_selected_board_image(board_name)
+        canvas_page.new_canvas_from_board_image_as_raster(board_name)
         canvas_page.wait_until_dom_stable()
+        canvas_page.new_layer_from_board_asset_as_inpaint_mask(board_name)
+        #canvas_page.wait_until_dom_stable()
         canvas_page.screenshot_page("new_canvas.png")
         #canvas_page.select_page() 
         #canvas_page.screenshot_page("before_canvas_reset.png") 

@@ -5,6 +5,8 @@ from playwright.sync_api import Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, Error as PlaywrightError
 
 class BasePage:
+    UP_CHEVRON = "M216.49,168.49a12,12,0,0,1-17,0L128,97"
+
     def __init__(self, page: Page):
         self.page = page
 
@@ -28,6 +30,11 @@ class BasePage:
 
     def select_board(self, board_name):
         button = self.page.locator("button").filter(has_text=board_name)
+        svg_path = button.first.locator("svg path") #.first.get_attribute("d")
+        svg_path = svg_path.first.get_attribute("d") if svg_path.count() > 0 else None
+        if svg_path and svg_path.startswith(self.UP_CHEVRON):
+            #board is selected and board galary is expanded 
+            return 
 
         if button.count() > 0:
             button.first.click()

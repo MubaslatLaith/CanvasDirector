@@ -37,8 +37,59 @@ def main():
         login_successful = login_page.validate_login()   
        
         
+        canvas_page = CanvasPage(page) 
+        canvas_page.select_page() 
+        
+        canvas_page.page.on(
+                "console",
+                lambda msg: print(f"[browser:{msg.type}] {msg.text}")
+                )
+        canvas_page.page.wait_for_timeout(1000)  # 1 secondog.warni('BRIDGE MANAGER ID', manager.id);
+        
+        print(canvas_page.page.evaluate("window.__invokeBridge.getManagerId()"))
+        canvas_page.page.evaluate("window.__invokeBridge.createNewCanvasEntityFromSelectedImage('raster_layer')")
+        
+        #print( page.evaluate("window.__invokeBridge.getManagerId()")) 
+
+        #print(page.evaluate("window.__invokeBridge.getManagerRepr()")     )
+
+        return 
+        canvas_page.page.on("console", lambda msg: print(f"[browser:{msg.type}] {msg.text}"))
+
+        canvas_page.page.on("pageerror", lambda exc: print(f"[pageerror] {exc}"))
+
+
+        before = canvas_page.page.evaluate(
+                    "window.__invokeBridge.getCanvasState().rasterLayers.entities.length"
+                    )
+
+
+
+        canvas_page.page.evaluate("window.__invokeBridge.createNewCanvasEntityFromSelectedImage('raster_layer')")
+        
+        #canvas_page.page.on("console", lambda msg: print(msg.text))
+
+
+        after = canvas_page.page.evaluate(
+                                    "window.__invokeBridge.getCanvasState().rasterLayers.entities.length"
+                                    )
+        
+        print("before =", before)
+
+        print("after  =", after)
+        
+
+        return 
+
+
+
+
         generate_page = GeneratePage(page) 
         
+
+
+
+
         #generate_page.page.evaluate("window.__invokeBridge.addRasterLayer()")
         """
         page = generate_page.page 

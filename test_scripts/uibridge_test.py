@@ -8,6 +8,8 @@ from contextmanager.uiclient.invokeai.canvas_page import CanvasPage
 from contextmanager.uiclient.invokeai.upscaling_page import UpscalingPage
 
 
+from contextmanager.uiclient.invokeai.invoke_bridge import InvokeUIBridge
+
 
 
 #INVOKE_URL = "http://localhost:5173" #
@@ -39,39 +41,25 @@ def main():
         
         canvas_page = CanvasPage(page) 
         canvas_page.select_page() 
+
+
+        bridge = InvokeUIBridge(page)
         
-        #canvas_page.select_board("image_to_edit_board") 
-
-        import time
-
+        import time 
+        #bridge.create_canvas_entity_from_selected_image("raster_layer")
+        params = bridge.get_params()
         start = time.perf_counter()
 
+        bridge.create_canvas_entity_from_selected_image("raster_layer") 
+        with bridge.wait_client_state_saved():
+            bridge.set_parameter("positive_prompt", "a cat wearing armor")
 
-
-
-        #canvas_page.page.evaluate("window.__invokeBridge.createNewCanvasEntityFromSelectedImage('raster_layer')")
         
-        #canvas_page.page.evaluate("window.__invokeBridge.createNewCanvasEntityFromSelectedImage('raster_layer')")
-        #canvas_page.page.on("console", lambda msg: print(msg.text))
-        
-        with page.expect_request_finished( 
-                                          lambda r: "client_state" in r.url and r.method in ("POST", "PUT"),
-                                          timeout=20000,
-                        ):
-            #canvas_page.page.evaluate("window.__invokeBridge.createNewCanvasEntityFromSelectedImage('raster_layer')")
-            page.evaluate("window.__invokeBridge.params.setPositivePrompt('a cat wearing sunglasXXXX')")
-            params = page.evaluate("window.__invokeBridge.params.get()")
-
-            print(params["positivePrompt"])
-        
-        elapsed = time.perf_counter() - start
         #canvas_page.select_board("image_to_edit_board") 
-        #canvas_page.select_board("Uncategorized")
-        #print("before =", before)
+        elapsed = time.perf_counter() - start
 
-        #print("after  =", after)
-        
         print(f"client_state request finished in {elapsed:.3f}s")
+
 
 
 if __name__ == "__main__":

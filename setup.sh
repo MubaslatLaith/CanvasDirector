@@ -26,7 +26,7 @@ deactivate
 git clone https://github.com/MubaslatLaith/InvokeAI-ContextManager.git
 git clone https://github.com/MubaslatLaith/invokeai.git
 cd InvokeAI-ContextManager
-#bash setup.sh
+bash setup.sh
 
 
 

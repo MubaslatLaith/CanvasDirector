@@ -4,7 +4,7 @@ class InvokeUIBridge:
         
         self.parameters = {} 
         self.parameters['positive_prompt'] = 'setPositivePrompt'  
-    
+        self.parameters['steps'] = 'setSteps'    
     def login(self):
         pass 
     

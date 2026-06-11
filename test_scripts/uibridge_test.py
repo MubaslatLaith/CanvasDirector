@@ -51,10 +51,11 @@ def main():
         start = time.perf_counter()
 
         bridge.create_canvas_entity_from_selected_image("raster_layer") 
+        bridge.set_parameter("steps", 7)
         with bridge.wait_client_state_saved():
             bridge.set_parameter("positive_prompt", "a cat wearing armor")
 
-        
+                
         #canvas_page.select_board("image_to_edit_board") 
         elapsed = time.perf_counter() - start
 

@@ -49,8 +49,12 @@ def main():
         #bridge.create_canvas_entity_from_selected_image("raster_layer")
         params = bridge.get_params()
         start = time.perf_counter()
-
+        #TODO replace tab/board selection with add entity from image id
+        canvas_page.page.get_by_test_id("images-tab").click()
         bridge.create_canvas_entity_from_selected_image("raster_layer") 
+        canvas_page.page.get_by_test_id("assets-tab").click()
+        canvas_page.wait_until_dom_stable()
+        bridge.create_canvas_entity_from_selected_image("inpaint_mask") 
         bridge.set_parameter("steps", 7)
         with bridge.wait_client_state_saved():
             bridge.set_parameter("positive_prompt", "a cat wearing armor")

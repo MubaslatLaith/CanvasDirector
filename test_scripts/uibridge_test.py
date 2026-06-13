@@ -56,10 +56,20 @@ def main():
         canvas_page.wait_until_dom_stable()
         bridge.create_canvas_entity_from_selected_image("inpaint_mask") 
         bridge.set_parameter("steps", 7)
-        with bridge.wait_client_state_saved():
-            bridge.set_parameter("positive_prompt", "a cat wearing armor")
 
-                
+
+        with bridge.wait_client_state_saved():
+            bridge.set_parameter("positive_prompt", "hold sword") #"a cat wearing armor")
+        
+        bridge.invoke() 
+
+
+        with bridge.wait_client_state_saved():
+            pass 
+            #    bridge.invoke() 
+            #aa = bridge.page.evaluate("window.__invokeBridge.queue.invoke()")
+            #print(aa)
+
         #canvas_page.select_board("image_to_edit_board") 
         elapsed = time.perf_counter() - start
 

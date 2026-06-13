@@ -5,9 +5,26 @@ class InvokeUIBridge:
         self.parameters = {} 
         self.parameters['positive_prompt'] = 'setPositivePrompt'  
         self.parameters['steps'] = 'setSteps'    
+
+
     def login(self):
         pass 
-    
+        
+    def invoke(self):
+        if self.page.evaluate("window.__invokeBridge.queue.isDisabled()"):
+            raise RuntimeError("Cannot invoke")
+        
+        self.page.evaluate("window.__invokeBridge.queue.invoke()")
+        
+        aa = self.page.evaluate("window.__invokeBridge.queue.isLoading()")
+
+        import pdb; pdb.set_trace() 
+        while (self.page.evaluate("window.__invokeBridge.queue.isLoading()")):
+            print('Invoking')
+        print ('invoke complete') 
+
+
+
     def wait_client_state_saved(self, timeout: int = 20000):
         return self.page.expect_request_finished(lambda r: "client_state" in r.url and r.method in ("POST", "PUT"), timeout=timeout)
 

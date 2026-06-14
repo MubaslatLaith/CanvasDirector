@@ -12,6 +12,10 @@ class InvokeUIBridge:
        
     def canvas_canAcceptSelected(self):
         return self.page.evaluate("window.__invokeBridge.stagingArea.canAcceptSelected()")
+    
+    def canvas_acceptSelected(self):
+        return self.page.evaluate("window.__invokeBridge.stagingArea.acceptSelected()")
+
     def invoke(self):
         if self.page.evaluate("window.__invokeBridge.queue.isDisabled()"):
             raise RuntimeError("Cannot invoke")

@@ -41,10 +41,9 @@ def main():
         
         canvas_page = CanvasPage(page) 
         canvas_page.select_page() 
-
+            
 
         bridge = InvokeUIBridge(page)
-        
         import time 
         #bridge.create_canvas_entity_from_selected_image("raster_layer")
         params = bridge.get_params()
@@ -63,6 +62,9 @@ def main():
         
         bridge.invoke() 
         
+        
+        with bridge.wait_client_state_saved():
+            bridge.canvas_acceptSelected() 
 
         #with bridge.wait_client_state_saved():
         #    pass

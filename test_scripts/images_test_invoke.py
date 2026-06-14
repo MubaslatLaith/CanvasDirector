@@ -14,6 +14,9 @@ def main():
     client = InvokeAIClient(base_url)
     user = client.login(email, password)
     
+    boards = client.boards.list_boards(all=True)
+    print(board)
+    import pdb; pdb.set_trace()
     #create board
 
     board_with_images = "6c48ce3b-d723-4f26-a0d3-9bbbf06e58c5" #"t0"

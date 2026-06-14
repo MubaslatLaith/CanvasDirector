@@ -6,10 +6,16 @@ class Images:
     def __init__(self, request_client: RequestClient, auth_header_provider):
         self._request_client = request_client
         self._auth_header_provider = auth_header_provider
+    
+    def assign_image(self, image_id: str, board_id: str): 
+        return self._request_client.patch(f"/api/v1/images/i/{image_name}/board", json={"board_id": board_id}, headers=self._auth_header_provider())
 
     def upload_image(self, image_path: str, board_id: str | None = None) -> dict[str, Any]:
-        raise NotImplementedError
-
+         with open(image_path, "rb") as f:
+            files = {"file": f}
+            data = {"board_id": board_id}
+            self._request_client.post("/api/v1/images/upload", files=files, data=data)
+    
     def create_image_upload_entry(self, image_name: str, board_id: str | None = None) -> dict[str, Any]:
         raise NotImplementedError
 

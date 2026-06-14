@@ -15,13 +15,6 @@ INVOKE_URL = "http://127.0.0.1:9091"
 USERNAME = "email@email.email"
 PASSWORD = "weakpassword" 
 
-"""
-def get_image_ids_by_board_name (self, board_name):
-    board = self.get_board_by_name(board_name)
-    board_id = board['board_id']
-    image_names = self.list_board_image_names(board_id).data
-    return image_names 
-"""
 def main():
     
     api_client = InvokeAIClient(INVOKE_URL)
@@ -33,21 +26,18 @@ def main():
     # start with the image in input_board_name (should contain a single image for now) 
 
     input_board_name = "My Board" 
-
+    mask_path = "/workspace/invokeai/test_mask.png"  
     image_to_edit_id = api_client.boards.get_image_ids_by_board_name (input_board_name) 
     image_to_edit_id = image_to_edit_id[0] 
     
-
-
-
 
     # create job boards 
 
     job_id = 0 
     
-    board_name_image_to_edit = f'inpaint_image_{job_id}' 
-    board_name_mask_to_edit = f'inpaint_mask_{job_id}' 
-    board_name_output = f'inpaint_output_{job_id}'
+    board_name_image_to_edit = f'inpaint_image_job_{job_id}' 
+    board_name_mask_to_edit = f'inpaint_mask_job_{job_id}' 
+    board_name_output = f'inpaint_output_job_{job_id}'
 
     api_client.boards.create_board(board_name_image_to_edit) 
     api_client.boards.create_board(board_name_mask_to_edit) 
@@ -62,15 +52,14 @@ def main():
 
 
 
-
         
 
     # cleanup 
-    
+    """ 
     api_client.boards.delete_board_by_name(board_name_image_to_edit)
     api_client.boards.delete_board_by_name(board_name_mask_to_edit)
     api_client.boards.delete_board_by_name(board_name_output) 
-
+    """
 
 
     

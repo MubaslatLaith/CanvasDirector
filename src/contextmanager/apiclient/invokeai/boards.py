@@ -7,6 +7,14 @@ class Boards:
         self._request_client = request_client
         self._auth_header_provider = auth_header_provider
 
+
+    def get_image_ids_by_board_name (self, board_name):
+        """ assumes a single image per board"""
+        board = self.get_board_by_name(board_name)
+        board_id = board['board_id']
+        image_names = self.list_board_image_names(board_id).data
+        return image_names
+
     def create_board(self, board_name: str):
         return self._request_client.post("/api/v1/boards/", params={"board_name": board_name}, headers=self._auth_header_provider())
 

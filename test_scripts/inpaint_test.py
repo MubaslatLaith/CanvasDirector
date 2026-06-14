@@ -15,9 +15,13 @@ INVOKE_URL = "http://127.0.0.1:9091"
 USERNAME = "email@email.email"
 PASSWORD = "weakpassword" 
 
-
-
-
+"""
+def get_image_ids_by_board_name (self, board_name):
+    board = self.get_board_by_name(board_name)
+    board_id = board['board_id']
+    image_names = self.list_board_image_names(board_id).data
+    return image_names 
+"""
 def main():
     
     api_client = InvokeAIClient(INVOKE_URL)
@@ -25,12 +29,30 @@ def main():
     
     #boards = api_client.boards.list_boards(all=True)
     #print(boards)
-    board_name = 'image_to_edit_board' 
-    board = api_client.boards.get_board_by_name(board_name)
-    print(board)
-    board_id = ''
-    image_names = api_client.boards.list_board_image_names(board_id).data
+    board_name_image_to_edit = 'image_to_edit_board' 
+    board_name_mask_to_edit = 'mask_to_edit_board' 
 
+    image_to_edit_id = api_client.boards.get_image_ids_by_board_name (board_name_image_to_edit)
+    mask_to_edit_id = api_client.boards.get_image_ids_by_board_name (board_name_mask_to_edit) 
+
+    print(image_to_edit_id)
+    print(mask_to_edit_id)
+
+
+
+    return 
+    #board = api_client.boards.get_board_by_name(board_name)
+    #print(board)
+    #board_id = board['board_id']
+    #image_names = api_client.boards.list_board_image_names(board_id).data
+   
+
+
+
+
+
+
+    #print(image_names) 
     with sync_playwright() as p:
 
 

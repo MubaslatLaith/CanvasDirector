@@ -45,21 +45,15 @@ def main():
 
     job_id = 0 
     
-    board_name_image_to_edit = f'inpaint_image_{job_id}' 
-    board_name_mask_to_edit = f'inpaint_mask_{job_id}' 
+    board_name_image_to_edit = f'inpaint_image_{job_id}'      
+    board_name_mask_to_edit = f'inpaint_mask_{job_id}'      
     board_name_output = f'inpaint_output_{job_id}'
-
-    api_client.boards.create_board(board_name_image_to_edit) 
-    api_client.boards.create_board(board_name_mask_to_edit) 
-    api_client.boards.create_board(board_name_output) 
+    #api_client.boards.create_board(board_name_image_to_edit) 
+    #api_client.boards.create_board(board_name_mask_to_edit) 
+    #api_client.boards.create_board(board_name_output) 
 
     
-    # assign image to board 
-
-    # assign mask to board 
-
-
-
+    
 
 
 

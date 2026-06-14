@@ -45,9 +45,15 @@ class Boards:
         archived: bool | None = None,
     ) -> dict[str, Any]:
         raise NotImplementedError
+    
+    def delete_board_by_name(self, board_name): 
+        board = self.get_board_by_name(board_name)
+        board_id = board['board_id']
+        self.delete_board(board_id) 
 
     def delete_board(self, board_id: str) -> dict[str, Any] | None:
-        raise NotImplementedError
+        return self._request_client.delete(f"/api/v1/boards/{board_id}", headers=self._auth_header_provider())
+        #raise NotImplementedError
 
     def list_board_image_names(self, board_id: str):
         return self._request_client.get(f"/api/v1/boards/{board_id}/image_names", headers=self._auth_header_provider())

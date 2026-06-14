@@ -28,6 +28,8 @@ class RequestClient:
         headers: dict | None = None,
         params: dict | None = None,
         json: dict | None = None,
+        data: dict | None = None,
+        files: dict | None = None
     ) -> APIResponse:
 
         response = requests.request(
@@ -36,7 +38,13 @@ class RequestClient:
             headers=headers,
             params=params,
             json=json,
-        )
+            data=data,
+            files=files,
+            )
+        
+        print(response.status_code)
+        print(response.text)
+        #print(response.url)
 
         response.raise_for_status()
 

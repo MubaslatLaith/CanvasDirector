@@ -29,7 +29,7 @@ def main():
     mask_path = "/workspace/invokeai/test_mask.png"  
     image_to_edit_id = api_client.boards.get_image_ids_by_board_name (input_board_name) 
     image_to_edit_id = image_to_edit_id[0] 
-    
+    print(image_to_edit_id)   
 
     # create job boards 
 
@@ -43,10 +43,17 @@ def main():
     api_client.boards.create_board(board_name_mask_to_edit) 
     api_client.boards.create_board(board_name_output) 
 
-    
-    # assign image to board 
+    board_id_image_to_edit = api_client.boards.get_board_by_name(board_name_image_to_edit)['board_id'] 
+    board_id_mask_to_edit = api_client.boards.get_board_by_name(board_name_mask_to_edit)['board_id']
+    board_id_name_to_edit = api_client.boards.get_board_by_name(board_name_output)['board_id']
 
-    # assign mask to board 
+
+    # assign image to board 
+    #api_client.images.assign_image(image_id = image_to_edit_id, board_id = board_id_image_to_edit)
+    # upload mask to board 
+    api_client.images.upload_image(image_path = mask_path, board_id = board_id_mask_to_edit, image_category = "mask") 
+
+
 
 
 

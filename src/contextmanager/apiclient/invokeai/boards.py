@@ -22,6 +22,13 @@ class Boards:
     def get_board(self, board_id: str):
         return self._request_client.get(f"/api/v1/boards/{board_id}", headers=self._auth_header_provider())
     
+    
+    def get_board_by_name(self, board_name):
+        response = self.list_boards(all=True)
+        for board in response.data:
+            if board["board_name"] == board_name:
+                return board
+        return None
 
     def update_board(
         self,

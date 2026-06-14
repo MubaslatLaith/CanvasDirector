@@ -9,17 +9,17 @@ class InvokeUIBridge:
 
     def login(self):
         pass 
-        
+       
+    def canvas_canAcceptSelected(self):
+        return self.page.evaluate("window.__invokeBridge.stagingArea.canAcceptSelected()")
     def invoke(self):
         if self.page.evaluate("window.__invokeBridge.queue.isDisabled()"):
             raise RuntimeError("Cannot invoke")
         
         self.page.evaluate("window.__invokeBridge.queue.invoke()")
         
-        aa = self.page.evaluate("window.__invokeBridge.queue.isLoading()")
-
-        import pdb; pdb.set_trace() 
-        while (self.page.evaluate("window.__invokeBridge.queue.isLoading()")):
+        #while (self.page.evaluate("window.__invokeBridge.queue.isLoading()")):
+        while (not self.canvas_canAcceptSelected()):
             print('Invoking')
         print ('invoke complete') 
 

@@ -59,13 +59,16 @@ def main():
 
 
         with bridge.wait_client_state_saved():
-            bridge.set_parameter("positive_prompt", "hold sword") #"a cat wearing armor")
+            bridge.set_parameter("positive_prompt", "fix hand") #"a cat wearing armor")
         
         bridge.invoke() 
+        
 
+        #with bridge.wait_client_state_saved():
+        #    pass
 
-        with bridge.wait_client_state_saved():
-            pass 
+        #with bridge.wait_client_state_saved():
+        #    pass 
             #    bridge.invoke() 
             #aa = bridge.page.evaluate("window.__invokeBridge.queue.invoke()")
             #print(aa)

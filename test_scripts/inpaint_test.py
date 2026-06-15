@@ -58,7 +58,7 @@ def main():
 
         board_id_image_to_edit = api_client.boards.get_board_by_name(board_name_image_to_edit)['board_id'] 
         board_id_mask_to_edit = api_client.boards.get_board_by_name(board_name_mask_to_edit)['board_id']
-        board_id_name_to_edit = api_client.boards.get_board_by_name(board_name_output)['board_id']
+        board_id_output = api_client.boards.get_board_by_name(board_name_output)['board_id']
 
 
         # assign image to board 
@@ -76,13 +76,19 @@ def main():
 
         bridge.create_canvas_entity_from_image_name("raster_layer", image_name)
         bridge.create_canvas_entity_from_image_name("inpaint_mask", mask_name )
+        
 
-
+        bridge.set_parameter("steps", 7)
         with bridge.wait_client_state_saved():
-            pass 
+            bridge.set_parameter("positive_prompt", "fix hand, hand should have 5 fingers and should be wide open. Hands should have correct anatomy") 
 
+        bridge.invoke()
 
-
+        #with bridge.wait_client_state_saved():
+        bridge.save_selected_to_gallery(board_id = board_id_output)
+        
+        #with bridge.wait_client_state_saved():
+        #    pass 
 
         return 
 

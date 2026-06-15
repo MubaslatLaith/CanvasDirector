@@ -12,7 +12,9 @@ class InvokeUIBridge:
       
     def reset_canvas(self):
         return self.page.evaluate("window.__invokeBridge.image.resetCanvas()") 
-
+    
+    def save_selected_to_gallery(self, board_id):
+        return self.page.evaluate("boardId => window.__invokeBridge.stagingArea.saveSelectedToGallery(boardId)", board_id)
     def create_canvas_entity_from_image_name(self, type_, image_name):
         return self.page.evaluate(
         """

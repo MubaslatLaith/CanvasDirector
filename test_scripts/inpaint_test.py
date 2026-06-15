@@ -33,8 +33,13 @@ def main():
         canvas_page = CanvasPage(page)
         canvas_page.select_page()
         bridge = InvokeUIBridge(page)
-
     
+        # test to remove TODO 
+        #with bridge.wait_client_state_saved():
+        bridge.reset_generation_settings() 
+
+        
+        #return 
 
         # start with the image in input_board_name (should contain a single image for now) 
 
@@ -43,7 +48,13 @@ def main():
         image_to_edit_id = api_client.boards.get_image_ids_by_board_name (input_board_name) 
         image_to_edit_id = image_to_edit_id[0] 
         print(image_to_edit_id)   
-
+        
+        
+        # test to remove TODO 
+        with bridge.wait_client_state_saved():
+            bridge.create_global_reference_image_from_image_name(image_to_edit_id)
+            bridge.create_global_reference_image_from_image_name(api_client.boards.get_image_ids_by_board_name("TestBoard0")[0]) 
+        return 
         # create job boards 
 
         job_id = 0 

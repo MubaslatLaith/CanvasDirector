@@ -36,9 +36,13 @@ def main():
     
         # test to remove TODO 
         #with bridge.wait_client_state_saved():
+        
+        # reset all generation settings and delete all global references 
+
         bridge.reset_generation_settings() 
         bridge.delete_all_ref_images() 
-        
+        #with bridge.wait_client_state_saved():
+        #    pass 
         #return 
 
         # start with the image in input_board_name (should contain a single image for now) 
@@ -50,11 +54,11 @@ def main():
         print(image_to_edit_id)   
         
         
-        # test to remove TODO 
-        with bridge.wait_client_state_saved():
-            bridge.create_global_reference_image_from_image_name(image_to_edit_id)
-            bridge.create_global_reference_image_from_image_name(api_client.boards.get_image_ids_by_board_name("TestBoard0")[0]) 
-        return 
+        # test to remove TODO  ADD references - tested use in ref based wfs 
+        #with bridge.wait_client_state_saved():
+        #    bridge.create_global_reference_image_from_image_name(image_to_edit_id)
+        #    bridge.create_global_reference_image_from_image_name(api_client.boards.get_image_ids_by_board_name("TestBoard0")[0]) 
+        
         # create job boards 
 
         job_id = 0 
@@ -98,8 +102,8 @@ def main():
         #with bridge.wait_client_state_saved():
         bridge.save_selected_to_gallery(board_id = board_id_output)
         bridge.canvas_discard_all() 
-        #with bridge.wait_client_state_saved():
-        #    pass 
+        with bridge.wait_client_state_saved():
+            pass 
 
         return 
 

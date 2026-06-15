@@ -37,7 +37,7 @@ def main():
         # test to remove TODO 
         #with bridge.wait_client_state_saved():
         bridge.reset_generation_settings() 
-
+        bridge.delete_all_ref_images() 
         
         #return 
 
@@ -97,7 +97,7 @@ def main():
 
         #with bridge.wait_client_state_saved():
         bridge.save_selected_to_gallery(board_id = board_id_output)
-        
+        bridge.canvas_discard_all() 
         #with bridge.wait_client_state_saved():
         #    pass 
 

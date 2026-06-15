@@ -9,7 +9,14 @@ class InvokeUIBridge:
 
     def login(self):
         pass 
-     
+    
+    def delete_all_ref_images(self):
+        return self.page.evaluate( "window.__invokeBridge.image.deleteAllGlobalReferenceImages()")
+            
+    def canvas_discard_all(self):
+        return self.page.evaluate("window.__invokeBridge.stagingArea.discardAll()")
+
+
     def reset_generation_settings(self):
         self.page.evaluate("window.__invokeBridge.params.resetGenerationSettings()")
 

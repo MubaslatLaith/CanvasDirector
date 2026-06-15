@@ -42,8 +42,8 @@ class RequestClient:
             files=files,
             )
         
-        print(response.status_code)
-        print(response.text)
+        #print(response.status_code)
+        #print(response.text)
         #print(response.url)
 
         response.raise_for_status()

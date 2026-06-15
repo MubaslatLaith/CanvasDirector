@@ -9,7 +9,26 @@ class InvokeUIBridge:
 
     def login(self):
         pass 
-       
+      
+    def reset_canvas(self):
+        return self.page.evaluate("window.__invokeBridge.image.resetCanvas()") 
+
+    def create_canvas_entity_from_image_name(self, type_, image_name):
+        return self.page.evaluate(
+        """
+        async ({ imageName, layerType }) => {
+        await window.__invokeBridge.image.createNewCanvasEntityFromImageName(
+        imageName,
+        layerType
+        );
+        }
+        """,
+        {
+            "imageName": image_name,
+            "layerType": type_
+            }
+        )
+
     def canvas_canAcceptSelected(self):
         return self.page.evaluate("window.__invokeBridge.stagingArea.canAcceptSelected()")
     

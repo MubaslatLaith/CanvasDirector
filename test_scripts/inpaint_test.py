@@ -16,45 +16,75 @@ USERNAME = "email@email.email"
 PASSWORD = "weakpassword" 
 
 def main():
-    
+    # api client setup
     api_client = InvokeAIClient(INVOKE_URL)
     user = api_client.login(USERNAME, PASSWORD)
     
-    #boards = api_client.boards.list_boards(all=True)
-    #print(boards) 
+    # bridge client setup 
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        login_page = LoginPage(page)
+        login_page.screenshot_page("bridge.png")
+        login_page.select_page(INVOKE_URL)
+        login_page.deselect_remember_me()
+        login_page.login(USERNAME, PASSWORD)
+        login_successful = login_page.validate_login()
+        canvas_page = CanvasPage(page)
+        canvas_page.select_page()
+        bridge = InvokeUIBridge(page)
 
-    # start with the image in input_board_name (should contain a single image for now) 
-
-    input_board_name = "My Board" 
-    mask_path = "/workspace/invokeai/test_mask.png"  
-    image_to_edit_id = api_client.boards.get_image_ids_by_board_name (input_board_name) 
-    image_to_edit_id = image_to_edit_id[0] 
-    print(image_to_edit_id)   
-
-    # create job boards 
-
-    job_id = 0 
     
-    board_name_image_to_edit = f'inpaint_image_job_{job_id}' 
-    board_name_mask_to_edit = f'inpaint_mask_job_{job_id}' 
-    board_name_output = f'inpaint_output_job_{job_id}'
 
-    api_client.boards.create_board(board_name_image_to_edit) 
-    api_client.boards.create_board(board_name_mask_to_edit) 
-    api_client.boards.create_board(board_name_output) 
+        # start with the image in input_board_name (should contain a single image for now) 
 
-    board_id_image_to_edit = api_client.boards.get_board_by_name(board_name_image_to_edit)['board_id'] 
-    board_id_mask_to_edit = api_client.boards.get_board_by_name(board_name_mask_to_edit)['board_id']
-    board_id_name_to_edit = api_client.boards.get_board_by_name(board_name_output)['board_id']
+        input_board_name = "My Board" 
+        mask_path = "/workspace/invokeai/test_mask.png"  
+        image_to_edit_id = api_client.boards.get_image_ids_by_board_name (input_board_name) 
+        image_to_edit_id = image_to_edit_id[0] 
+        print(image_to_edit_id)   
+
+        # create job boards 
+
+        job_id = 0 
+        
+        board_name_image_to_edit = f'inpaint_image_job_{job_id}' 
+        board_name_mask_to_edit = f'inpaint_mask_job_{job_id}' 
+        board_name_output = f'inpaint_output_job_{job_id}'
+
+        api_client.boards.create_board(board_name_image_to_edit) 
+        api_client.boards.create_board(board_name_mask_to_edit) 
+        api_client.boards.create_board(board_name_output) 
+
+        board_id_image_to_edit = api_client.boards.get_board_by_name(board_name_image_to_edit)['board_id'] 
+        board_id_mask_to_edit = api_client.boards.get_board_by_name(board_name_mask_to_edit)['board_id']
+        board_id_name_to_edit = api_client.boards.get_board_by_name(board_name_output)['board_id']
 
 
-    # assign image to board 
-    #api_client.images.assign_image(image_id = image_to_edit_id, board_id = board_id_image_to_edit)
-    # upload mask to board 
-    api_client.images.upload_image(image_path = mask_path, board_id = board_id_mask_to_edit, image_category = "mask") 
+        # assign image to board 
+        #api_client.images.assign_image(image_id = image_to_edit_id, board_id = board_id_image_to_edit)
+        # upload mask to board 
+        api_client.images.upload_image(image_path = mask_path, board_id = board_id_mask_to_edit, image_category = "mask") 
+
+        
+        # reset canvas
+        bridge.reset_canvas() 
+        
+        #TODO modify to take board name
+        image_name = image_to_edit_id#api_client. 
+        mask_name = api_client.boards.get_image_ids_by_board_name(board_name_mask_to_edit)[0] 
+
+        bridge.create_canvas_entity_from_image_name("raster_layer", image_name)
+        bridge.create_canvas_entity_from_image_name("inpaint_mask", mask_name )
+
+
+        with bridge.wait_client_state_saved():
+            pass 
 
 
 
+
+        return 
 
 
 
@@ -71,7 +101,6 @@ def main():
 
     
 
-    return 
     image_to_edit_id = api_client.boards.get_image_ids_by_board_name (board_name_image_to_edit)
     mask_to_edit_id = api_client.boards.get_image_ids_by_board_name (board_name_mask_to_edit) 
 

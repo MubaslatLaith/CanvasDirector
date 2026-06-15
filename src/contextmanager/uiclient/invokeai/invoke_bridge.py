@@ -9,7 +9,16 @@ class InvokeUIBridge:
 
     def login(self):
         pass 
-      
+     
+    def reset_generation_settings(self):
+        self.page.evaluate("window.__invokeBridge.params.resetGenerationSettings()")
+
+    def create_global_reference_image_from_image_name(self, image_name):
+        return self.page.evaluate(
+                "imageName => window.__invokeBridge.image.createGlobalReferenceImageFromImageName(imageName)",
+                image_name,
+                )
+
     def reset_canvas(self):
         return self.page.evaluate("window.__invokeBridge.image.resetCanvas()") 
     

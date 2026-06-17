@@ -19,14 +19,17 @@ poetry install
 poetry run playwright install chromium
 poetry run playwright install-deps chromium
 
+# install and build llama cpp 
+bash setup_llamacpp.sh
 
-cd .. 
 
-deactivate 
-git clone https://github.com/MubaslatLaith/InvokeAI-ContextManager.git
-git clone https://github.com/MubaslatLaith/invokeai.git
-cd InvokeAI-ContextManager
-bash setup.sh
+# install invokeai
+#cd .. 
+#deactivate 
+#git clone https://github.com/MubaslatLaith/InvokeAI-ContextManager.git
+#git clone https://github.com/MubaslatLaith/invokeai.git
+#cd InvokeAI-ContextManager
+#bash setup.sh
 
 
 

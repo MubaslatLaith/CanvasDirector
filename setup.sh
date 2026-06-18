@@ -24,12 +24,12 @@ bash setup_llamacpp.sh
 
 
 # install invokeai
-#cd .. 
-#deactivate 
-#git clone https://github.com/MubaslatLaith/InvokeAI-ContextManager.git
-#git clone https://github.com/MubaslatLaith/invokeai.git
-#cd InvokeAI-ContextManager
-#bash setup.sh
+cd .. 
+deactivate 
+git clone https://github.com/MubaslatLaith/InvokeAI-ContextManager.git
+git clone https://github.com/MubaslatLaith/invokeai.git
+cd InvokeAI-ContextManager
+bash setup.sh
 
 
 

@@ -5,6 +5,7 @@ python3 -m venv .venv
 source /venv/main/bin/activate
 export PATH="/venv/main/bin:$PATH"
 source /workspace/cpp/.venv/bin/activate
+pip install huggingface_hub
 apt-get update
 apt install -y cuda-toolkit
 apt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y
@@ -18,3 +19,7 @@ cmake llama.cpp -B llama.cpp/build \
 cmake --build llama.cpp/build --config Release -j \
   --target llama-cli llama-mtmd-cli llama-server llama-gguf-split
 cp llama.cpp/build/bin/llama-* llama.cpp/
+cd .. 
+cd ContextManagerV3
+bash download_qwen.sh
+

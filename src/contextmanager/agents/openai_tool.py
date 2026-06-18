@@ -37,5 +37,5 @@ class OpenAITool:
             },
         }
     
-    #async def execute(self, arguments):
-    #    return await self.function(**arguments)
+    async def execute(self, arguments):
+        return await self.function(**arguments)

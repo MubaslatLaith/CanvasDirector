@@ -47,7 +47,7 @@ class BaseAgent(ABC):
        response = self.openai_client.chat.completions.create(
                model="default",
                messages=messages, 
-               tools=self.tools_schema,
+               tools=self.tools_openai_schema,
                tool_choice="auto",
                )
        return response 

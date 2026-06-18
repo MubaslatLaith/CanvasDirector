@@ -9,10 +9,13 @@ async def dummy_function():
 
 
 def main():
+    
+    base_url = "http://127.0.0.1:8001/v1"
+    api_key = "sk-no-key-required"
 
     agent = TestAgent(
-        base_url="http://localhost:8000/v1",
-        api_key="dummy",
+        base_url=base_url,
+        api_key=api_key,
     )
 
     print("System Prompt:")
@@ -44,6 +47,11 @@ def main():
     print("\nOpenAI Schemas:")
     print(agent.tools_openai_schema)
     
+
+    response = agent.complete ("hi how are you?") 
+
+    print(response) 
+
 
 if __name__ == "__main__":
     main()

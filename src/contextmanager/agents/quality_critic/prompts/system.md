@@ -17,3 +17,4 @@ Schema:
   "issues": string[],
   "recommended_action": "done" | "retry_inpaint" | "retry_generate" | "ask_user"
 }
+

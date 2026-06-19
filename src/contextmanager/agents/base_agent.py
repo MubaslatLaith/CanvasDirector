@@ -35,7 +35,7 @@ class BaseAgent(ABC):
         system_prompt_path = Path(f"{Path(__file__).parent}/{self.name}/prompts/{self.SYSTEM_PROMPT_FILE}")
         return system_prompt_path.read_text(encoding="utf-8")
 
-    def complete(self, user_content):
+    def complete(self, user_content, temperature = None):
        user_message = [ 
             {
                 "role": "user",
@@ -44,17 +44,33 @@ class BaseAgent(ABC):
         ] 
        messages = self.curr_messages + user_message 
 
+       kwargs = {
+               "model": "default",
+               "messages": messages,
+               "tools": self.tools_openai_schema,
+               "tool_choice": "auto",
+               }
+
+       if temperature is not None:
+           kwargs["temperature"] = temperature
+
+
+        response = self.openai_client.chat.completions.create(**kwargs
+
+
+       """
        response = self.openai_client.chat.completions.create(
                model="default",
                messages=messages, 
                tools=self.tools_openai_schema,
                tool_choice="auto",
                )
+       """
        return response 
 
 
     @abstractmethod
-    async def run(self, state):
+    async def run(self, **kwargs):
         pass
 
     def register_tool(self, tool: OpenAITool):

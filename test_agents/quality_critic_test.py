@@ -25,7 +25,8 @@ async def main():
     user = api_client.login(USERNAME, PASSWORD)
 
     print ('t2i output image') 
-    output_board_name = "In Board"
+    output_board_name = "image_to_edit_board" #
+    #output_board_name = "In Board"
     output_image_name = api_client.boards.get_image_ids_by_board_name (output_board_name)
     print('output image')
     print(output_image_name)

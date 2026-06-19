@@ -50,22 +50,11 @@ class BaseAgent(ABC):
                "tools": self.tools_openai_schema,
                "tool_choice": "auto",
                }
-
        if temperature is not None:
            kwargs["temperature"] = temperature
+       
 
-
-        response = self.openai_client.chat.completions.create(**kwargs
-
-
-       """
-       response = self.openai_client.chat.completions.create(
-               model="default",
-               messages=messages, 
-               tools=self.tools_openai_schema,
-               tool_choice="auto",
-               )
-       """
+       response = self.openai_client.chat.completions.create(**kwargs)
        return response 
 
 

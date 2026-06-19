@@ -53,6 +53,14 @@ async def main():
     
     issues = issues1 + issues2 
 
+
+    issues = []
+    issues.append ("the character in the generated image has an extra button that does not match the reference images")
+    issues.append ("the character hair style is different than the hair style in the image")
+    issues.append ("the character pose does not match the pose in the reference image") 
+
+
+
     for i in range(len(issues)):
         print('_____')
         print(i)

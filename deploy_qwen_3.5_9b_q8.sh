@@ -13,4 +13,5 @@ source /workspace/cpp/.venv/bin/activate
   --min-p 0.01 \
   --ctx-size 16384 \
   --port 8001 \
-  --jinja
+  --jinja \
+  --image-min-tokens 1024

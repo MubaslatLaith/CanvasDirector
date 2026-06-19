@@ -6,7 +6,7 @@ from huggingface_hub import snapshot_download
 model_name = 'Qwen3.6-27B-GGUF'  
 repo_id = f'unsloth/{model_name}'
 local_dir = f'/workspace/{model_name}'
-quant = 'Q3_K_S'#'*Q8_0*'
+quant = '*Q3_K_S*'#'*Q8_0*'
 
 
 snapshot_download(

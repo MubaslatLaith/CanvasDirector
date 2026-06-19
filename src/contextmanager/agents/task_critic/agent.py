@@ -7,7 +7,7 @@ class TaskCritic(BaseAgent):
     def name(self):
         return "task_critic" 
     
-    async def run(self, input_images, output_image, user_request):
+    def run(self, input_images, output_image, user_request):
         user_content = self.build_user_content(input_images, output_image, user_request) 
         response = self.complete(user_content, temperature = 0) 
         content = response.choices[0].message.content
@@ -22,6 +22,7 @@ class TaskCritic(BaseAgent):
 
         # TODO build input images message 
         base64images = True 
+        input_images_content = [] 
         input_images_content.append(
                         {
                             "type": "text",
@@ -50,7 +51,7 @@ class TaskCritic(BaseAgent):
                             "text": f"output image:",
                         })
         if base64images:
-            url = f"data:image/png;base64,{image}" 
+            url = f"data:image/png;base64,{output_image}" 
         else:
             url = output_image 
         output_image_content.append( {
@@ -59,6 +60,8 @@ class TaskCritic(BaseAgent):
                     "url": url
                     }
                 }
+                                    )
+
 
 
         user_content = user_request_content + input_images_content + output_image_content 

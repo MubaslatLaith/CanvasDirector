@@ -70,7 +70,7 @@ class BaseAgent(ABC):
 
 
     @abstractmethod
-    async def run(self, **kwargs):
+    def run(self, **kwargs):
         pass
 
     def register_tool(self, tool: OpenAITool):

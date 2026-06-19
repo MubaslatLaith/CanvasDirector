@@ -1,7 +1,7 @@
 import json
 from contextmanager.agents.base_agent import BaseAgent 
 
-class TaskCritic(BaseAgent):
+class TaskCriticAgent(BaseAgent):
 
     @property
     def name(self):
@@ -21,7 +21,9 @@ class TaskCritic(BaseAgent):
                         }]
 
         # TODO build input images message 
-        base64images = True 
+        
+        # TODO remove base64 config (or split?)
+        base64images = False
         input_images_content = [] 
         input_images_content.append(
                         {

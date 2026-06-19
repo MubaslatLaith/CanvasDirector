@@ -7,6 +7,9 @@ class Images:
         self._request_client = request_client
         self._auth_header_provider = auth_header_provider
     
+    def get_image_url(self, image_name: str) -> str:
+        return f"{self._request_client.base_url.rstrip('/')}/api/v1/images/i/{image_name}/full"
+    
     def assign_image(self, image_id: str, board_id: str): 
         response =  self._request_client.post("/api/v1/board_images/", json={"board_id": board_id, "image_name": image_id}, headers=self._auth_header_provider())
     
@@ -49,8 +52,6 @@ class Images:
     def get_image_workflow(self, image_name: str) -> dict[str, Any]:
         raise NotImplementedError
 
-    def get_image_urls(self, image_name: str) -> dict[str, Any]:
-        raise NotImplementedError
 
     def get_full_image(self, image_name: str):
         return self._request_client.get(f"/api/v1/images/i/{image_name}/full", headers=self._auth_header_provider()) 

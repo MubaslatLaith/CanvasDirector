@@ -7,6 +7,8 @@ from contextmanager.agents.openai_tool import OpenAITool
 
 from contextmanager.apiclient.invokeai.client import InvokeAIClient
 
+
+
 async def main():
     base_url = "http://127.0.0.1:8001/v1"
     api_key = "sk-no-key-required"
@@ -56,7 +58,7 @@ async def main():
 
     issues = []
     issues.append ("the character in the generated image has an extra button that does not match the reference images")
-    issues.append ("the character hair style is different than the hair style in the image")
+    issues.append ("the character hair style is different than the hair style in the reference image")
     issues.append ("the character pose does not match the pose in the reference image") 
 
 

@@ -5,8 +5,8 @@ import torch
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from contextmanger.perception_tools.sam3 import SAM3Tool 
-from src.requests.segment import SegmentRequest
+from contextmanager.perception_tools.sam3 import SAM3Tool 
+from contextmanager.perception_tools.requests.segment import SegmentRequest
 from src.tool_manager import ToolManager
 from src.tool import Tool 
 # t2i 

@@ -5,6 +5,7 @@ import torch
 from PIL import Image
 import requests
 import numpy as np 
+from io import BytesIO
 
 
 class SAM3Tool:
@@ -22,9 +23,14 @@ class SAM3Tool:
         #image = Image.open(requests.get(image_url, stream=True).raw).convert("RGB")
         #image_bytes = base64.b64decode(req.image_base64)
         #image = Image.open(io.BytesIO(image_bytes))
-        
+        response = requests.get(req.image_url, stream=True, headers=req.headers)
+        image = Image.open(BytesIO(response.content)).convert("RGB") 
 
-        image = Image.open(requests.get(req.image_url, stream=True).raw).convert("RGB")
+
+        #import pdb; pdb.set_trace() 
+
+
+        #image = Image.open(requests.get(req.image_url, stream=True, headers=req.headers).raw).convert("RGB")
 
 
 

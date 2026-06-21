@@ -5,17 +5,18 @@ import asyncio
 from contextmanager.apiclient.invokeai.client import InvokeAIClient
 
 
-def segment(image_url, prompt, threshold, mask_threshold, base_tools_url): 
+def segment(image_url, prompt, threshold, mask_threshold, base_tools_url, headers): #, headers):
     task = 'segment'
     url = f'{base_tools_url}/{task}'
     payload = {
                 "prompt": prompt, 
                 "image_url": image_url,
                 "threshold": threshold,
-                "mask_threshold": mask_threshold
+                "mask_threshold": mask_threshold,
+                "headers": headers, 
                 }
 
-    response = requests.post(url, json=payload)
+    response = requests.post(url, json=payload) #, #headers = headers)
     response.raise_for_status()
     segments = response.json()
     return segments 
@@ -47,8 +48,22 @@ async def main():
 
     segmentation_prompt = "hand" 
     base_tools_url = "http://0.0.0.0:8000"
-    segmentation_output = segment(image_url = output_image_url, prompt = segmentation_prompt, threshold = 0.7, mask_threshold = 0.7, base_tools_url=base_tools_url)
+    segmentation_output = segment(image_url = output_image_url, prompt = segmentation_prompt, threshold = 0.7, mask_threshold = 0.7, base_tools_url=base_tools_url, headers = api_client._get_headers()) 
     import pdb; pdb.set_trace() 
+    
+
+    boxes = segmentation_output['boxes'] 
+    masks = segmentation_output['masks'] 
+
+
+    
+
+
+
+
+
+
+
 
 
 if __name__ == "__main__":

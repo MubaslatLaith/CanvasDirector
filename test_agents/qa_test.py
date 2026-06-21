@@ -2,7 +2,7 @@ import asyncio
 
 
 from contextmanager.agents.quality_critic.agent import QualityCriticAgent
-from contextmanager.agents.planner.agent import PlannerAgent
+from contextmanager.agents.qa.agent import QAAgent
 from contextmanager.agents.openai_tool import OpenAITool
 
 from contextmanager.apiclient.invokeai.client import InvokeAIClient
@@ -13,39 +13,15 @@ async def main():
     base_url = "http://127.0.0.1:8001/v1"
     api_key = "sk-no-key-required"
 
-    """
-    agent = QualityCriticAgent(
-        base_url=base_url,
-        api_key=api_key,
-    )
-    
-    # get input output urls 
-    INVOKE_URL = "http://127.0.0.1:9091"
-    USERNAME = "email@email.email"
-    PASSWORD = "weakpassword"
-
-    api_client = InvokeAIClient(INVOKE_URL)
-    user = api_client.login(USERNAME, PASSWORD)
-
-    print ('t2i output image') 
-    output_board_name = "image_to_edit_board" #
-    #output_board_name = "In Board"
-    output_image_name = api_client.boards.get_image_ids_by_board_name (output_board_name)
-    print('output image')
-    print(output_image_name)
-    i= 0
-    output_image_url = api_client.images.get_image_url(output_image_name[i])
-    print (output_image_url) 
-
-    result = agent.run(output_image = output_image_url)
-    #result = agent.run("in image asjdlak, the had mask is oiasdoajs, prompt fix hand")#Inpaint image asjdlak with mask oiasdoajs and prompt aoisdoakwmd")
-    print(result)
-    """
-    planner_agent = PlannerAgent(
+    qa_agent = QAAgent(
             base_url=base_url,
             api_key=api_key,
             )
     
+
+
+    
+
     #image_to_edit_board
     issues1 = ['Inconsistent shoe colors: The left shoe is white while the right shoe is light blue/grey.', "Left hand anatomy: The fingers on the character's right hand (viewer's left) appear slightly clumped and malformed.", "Right hand definition: The fingers on the character's left hand (viewer's right) are somewhat flat and lack distinct knuckle definition."]
     
@@ -64,14 +40,11 @@ async def main():
     
     #issues = issues2
     
-    issues = []
     issues.append("The character’s face, clothing, and identity are correct, but the pose does not match the provided reference image. The left arm should be raised above the head and the torso should be rotated slightly to the left.")
     issues.append("The character is supposed to be holding a sword with both hands, but the sword is missing. The hands are posed as if gripping an object.") 
     issues.append("The character is standing on a city street, but the feet do not align with the ground plane. The left foot appears to float above the pavement and the shadow direction does not match the lighting of the scene.") 
-    
-    
+     
 
-    issues = [] 
     multistep_test = "This is a generation based on reference character images. The character is supposed to be holding a sword with both hands, but the sword is missing. The hands are posed as if gripping an object." 
     
     
@@ -97,11 +70,21 @@ async def main():
         print('_____')
         print(i)
         issue = issues[i]
+        
+        #Q1: Is there an existing image to modify?
 
-    
-        result = planner_agent.run(issue) 
-        print(issue)
+        
+        #Q2: Is the issue confined to a specific region of the image? 
+        question = "Can the issue be resolved by modifying a bounded image region while leaving the remainder of the image unchanged?" #"Is the issue confined to a specific region of the image?" 
+        #print(question)
+        prompt = f"\nissue: {issue}\n{question}"
+        print(prompt)
+        result = qa_agent.run(prompt) #f'issue: {issue}\n{question}')
+        #result = qa_agent.run(issue) 
+        #print(issue)
         print(result)
+        import pdb; pdb.set_trace() 
+        #print(result)
     import pdb; pdb.set_trace() 
     
 

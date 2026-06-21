@@ -16,7 +16,7 @@ from contextmanager.tool import Tool
 # get pose 
 # detect object 
 
-
+offload = True 
 device = "cuda"
 
 #TODO modify here for what tasks to define, tools to load 
@@ -25,13 +25,16 @@ sam_3_tool = SAM3Tool(device)
 TOOLS = []
 TOOLS.append(Tool(task = 'segment', processor = sam_3_tool))
 
+
+
+
 app = FastAPI(title="Tool Manager API")
 manager = ToolManager() 
 
 @app.on_event("startup")
 def startup():
     # register all tools 
-    for i in range(len(TOOLS)):
+    for i in range(len(TOOLS)): 
         TOOLS[i].processor.load() 
         manager.register(TOOLS[i].task, TOOLS[i].processor) 
 

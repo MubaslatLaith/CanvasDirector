@@ -20,8 +20,14 @@ class SAM3Tool:
     def run(self, task, req):
         #image_url = "http://images.cocodataset.org/val2017/000000077595.jpg"
         #image = Image.open(requests.get(image_url, stream=True).raw).convert("RGB")
-        image_bytes = base64.b64decode(req.image_base64)
-        image = Image.open(io.BytesIO(image_bytes))
+        #image_bytes = base64.b64decode(req.image_base64)
+        #image = Image.open(io.BytesIO(image_bytes))
+        
+
+        image = Image.open(requests.get(req.image_url, stream=True).raw).convert("RGB")
+
+
+
         # Segment using text prompt
         inputs = self.processor(images=image, text=req.prompt, return_tensors="pt").to(self.device)
 

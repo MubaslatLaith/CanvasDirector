@@ -18,6 +18,8 @@ poetry env use $(pwd)/.venv/bin/python
 poetry install
 poetry run playwright install chromium
 poetry run playwright install-deps chromium
+uv pip install --upgrade git+https://github.com/huggingface/transformers.git 
+
 
 # install and build llama cpp 
 bash setup_llamacpp.sh

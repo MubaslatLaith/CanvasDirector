@@ -12,6 +12,10 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.11"
 
+# API
+fastapi = "^0.116"
+uvicorn = { version = "^0.35", extras = ["standard"] }
+
 # Core
 pydantic = "^2.11"
 typing-extensions = "^4.14"
@@ -26,6 +30,15 @@ anthropic = "^0.69"
 # Image processing
 pillow = "^11.3"
 numpy = "^2.3"
+
+# ML / vision runtime
+torch = { version = "2.7.1", source = "pytorch-cu128" }
+torchvision = { version = "0.22.1", source = "pytorch-cu128" }
+
+# ML / vision models
+transformers = "*" 
+accelerate = "^1.12"
+safetensors = "^0.6"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -50,3 +63,10 @@ strict = false
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+
+[[tool.poetry.source]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+priority = "explicit"

@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from contextmanager.perception_tools.sam3 import SAM3Tool 
 from contextmanager.perception_tools.requests.segment import SegmentRequest
 from contextmanager.tool_manager import ToolManager
-from src.tool import Tool 
+from contextmanager.tool import Tool 
 # t2i 
 # ref2i 
 # inpaint 
@@ -56,7 +56,7 @@ def segment(req: SegmentRequest):
 
 if __name__ == "__main__":
     uvicorn.run(
-            "app:app",
+            "tools_app:app",
             host = "0.0.0.0",
             port = 8000,
             reload = False

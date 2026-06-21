@@ -14,4 +14,5 @@ source /workspace/cpp/.venv/bin/activate
   --ctx-size 16384 \
   --port 8001 \
   --jinja \
-  --image-min-tokens 1024
+  --image-min-tokens 1024 \
+  --chat-template-kwargs '{"enable_thinking":false}'

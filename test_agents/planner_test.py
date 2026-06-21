@@ -54,13 +54,15 @@ async def main():
     issues2 = ["The brown strap hanging from the backpack/belt area appears disconnected or ambiguously attached to the character's clothing.", "The character's left hand (viewer's right) has a slightly indistinct wrist connection to the arm.", 'Background buildings on the right side lack clear architectural definition and appear somewhat generic.', 'The speed lines cut off abruptly at the image borders, creating a harsh edge effect.']
     
     issues = issues1 + issues2 
+    
 
-
-    issues = []
+    
+    #issues = []
     issues.append ("the character in the generated image has an extra button that does not match the reference images")
     issues.append ("the character hair style is different than the hair style in the reference image")
     issues.append ("the character pose does not match the pose in the reference image") 
-
+    
+    issues = issues2
 
 
     for i in range(len(issues)):

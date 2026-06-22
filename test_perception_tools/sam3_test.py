@@ -1,6 +1,7 @@
 import io
+import base64
 import requests 
-
+from PIL import Image
 import asyncio
 from contextmanager.apiclient.invokeai.client import InvokeAIClient
 
@@ -18,8 +19,17 @@ def segment(image_url, prompt, threshold, mask_threshold, base_tools_url, header
 
     response = requests.post(url, json=payload) #, #headers = headers)
     response.raise_for_status()
-    segments = response.json()
-    return segments 
+    segments_info = response.json()
+    
+    decoded_masks = [] 
+    for i in range(segments_info['num_masks']):
+        decoded_bytes = base64.b64decode(segments_info['masks'][i])
+        buffer = io.BytesIO(decoded_bytes)
+        mask_image = Image.open(buffer)
+        decoded_masks.append(mask_image)
+    
+    segments_info['masks'] = decoded_masks
+    return segments_info 
 
 async def main():
     INVOKE_URL = "http://127.0.0.1:9091"

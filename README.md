@@ -16,8 +16,8 @@ The long-term goal is to create a context-aware image generation system capable 
 Clone the repository and run the setup script:
 
 ```bash
-git clone https://github.com/MubaslatLaith/ContextManagerV3.git
-cd ContextManagerV3
+git clone https://github.com/MubaslatLaith/CanvasDirector.git
+cd CanvasDirector
 bash setup.sh
 ```
 
@@ -111,7 +111,7 @@ Examples demonstrating interaction with InvokeAI through:
 
 The bridge implementation can be found in the companion repository:
 
-https://github.com/MubaslatLaith/InvokeAI-ContextManager
+https://github.com/MubaslatLaith/InvokeAI-CanvasDirector
 
 These examples cover functionality such as:
 

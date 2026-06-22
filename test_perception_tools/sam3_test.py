@@ -4,7 +4,17 @@ import requests
 from PIL import Image
 import asyncio
 from contextmanager.apiclient.invokeai.client import InvokeAIClient
+from PIL import ImageFilter 
 
+
+
+def sam3__mask_to_invoke_rgba(mask):
+    # TODO validate alpha
+    alpha = mask.convert("L").filter(ImageFilter.GaussianBlur(radius=4))
+    invoke_mask = Image.new("RGBA", alpha.size, (0, 0, 0, 0))
+    rgba = Image.new("RGBA", alpha.size, (0, 0, 0, 0))
+    rgba.putalpha(alpha)
+    return rgba
 
 def segment(image_url, prompt, threshold, mask_threshold, base_tools_url, headers): #, headers):
     task = 'segment'
@@ -64,8 +74,11 @@ async def main():
     boxes = segmentation_output['boxes'] 
     masks = segmentation_output['masks'] 
     
-    masks[0].save('/workspace/ContextManagerV3/sam3_mask0.png')
-    masks[1].save('/workspace/ContextManagerV3/sam3_mask1.png') 
+    masks = [sam3__mask_to_invoke_rgba(masks[i]) for i in range(len(masks))] 
+
+
+    masks[0].save('/workspace/CanvasDirector/sam3_mask0.png')
+    masks[1].save('/workspace/CanvasDirector/sam3_mask1.png') 
 
     import pdb; pdb.set_trace()  
 

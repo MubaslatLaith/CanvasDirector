@@ -1,3 +1,6 @@
+import io
+import numpy as np
+import requests
 from PIL import Image
 from contextmanager.generation_tools.invoke_generate import GenerationClient 
 
@@ -24,7 +27,13 @@ generation_client.init_working_space(job_id)
 
 
 #TODO replace with call to SegmentationAgent (i.e., SAM3 for a specific image / issue ) 
-mask = Image.open('/workspace/ContextManagerV3/sam3_mask0.png') 
+mask = Image.open('/workspace/CanvasDirector/sam3_mask0.png') 
+
+
+
+
+import pdb; pdb.set_trace() 
+
 generation_client.assign_mask_to_edit(mask) 
 
 

@@ -59,14 +59,15 @@ async def main():
     segmentation_prompt = "hand" 
     base_tools_url = "http://0.0.0.0:8000"
     segmentation_output = segment(image_url = output_image_url, prompt = segmentation_prompt, threshold = 0.7, mask_threshold = 0.7, base_tools_url=base_tools_url, headers = api_client._get_headers()) 
-    import pdb; pdb.set_trace() 
     
 
     boxes = segmentation_output['boxes'] 
     masks = segmentation_output['masks'] 
-
-
     
+    masks[0].save('/workspace/ContextManagerV3/sam3_mask0.png')
+    masks[1].save('/workspace/ContextManagerV3/sam3_mask1.png') 
+
+    import pdb; pdb.set_trace()  
 
 
 

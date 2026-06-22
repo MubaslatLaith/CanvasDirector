@@ -20,6 +20,6 @@ cmake --build llama.cpp/build --config Release -j \
   --target llama-cli llama-mtmd-cli llama-server llama-gguf-split
 cp llama.cpp/build/bin/llama-* llama.cpp/
 cd .. 
-cd ContextManagerV3
+cd CanvasDirector
 bash download_qwen_3.6_27b_q3.sh
 bash download_qwen_3.5_9b_q8.sh

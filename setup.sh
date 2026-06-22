@@ -28,9 +28,9 @@ bash setup_llamacpp.sh
 # install invokeai
 cd .. 
 deactivate 
-git clone https://github.com/MubaslatLaith/InvokeAI-ContextManager.git
+git clone https://github.com/MubaslatLaith/InvokeAI-CanvasDirector.git
 git clone https://github.com/MubaslatLaith/invokeai.git
-cd InvokeAI-ContextManager
+cd InvokeAI-CanvasDirector
 bash setup.sh
 
 

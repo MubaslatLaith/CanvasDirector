@@ -39,6 +39,7 @@ torchvision = { version = "0.22.1", source = "pytorch-cu128" }
 transformers = "*" 
 accelerate = "^1.12"
 safetensors = "^0.6"
+playwright = "^1.60.0"
 
 
 [tool.poetry.group.dev.dependencies]

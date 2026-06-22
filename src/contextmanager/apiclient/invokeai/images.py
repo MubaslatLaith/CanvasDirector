@@ -1,3 +1,4 @@
+import io
 from typing import Any
 from contextmanager.apiclient.request import RequestClient
 from pathlib import Path
@@ -29,7 +30,21 @@ class Images:
             files = {"file": (Path(image_path).name, f, "image/png")}
             return self._request_client.post("/api/v1/images/upload", params=params, files=files, headers=headers) 
 
+    import io
 
+    def upload_pil_image(self, image, filename="image.png", board_id=None, image_category="general"):
+            params = {
+                    "image_category": image_category,
+                    "is_intermediate": False,
+                    }
+            params["board_id"] = board_id
+            headers = self._auth_header_provider()
+            headers.pop("Content-Type", None)
+            buffer = io.BytesIO()
+            image.save(buffer, format="PNG")
+            buffer.seek(0)
+            files = {"file": (filename, buffer, "image/png")}
+            return self._request_client.post("/api/v1/images/upload",params=params,files=files,headers=headers,)
 
     def create_image_upload_entry(self, image_name: str, board_id: str | None = None) -> dict[str, Any]:
         raise NotImplementedError

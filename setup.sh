@@ -1,5 +1,6 @@
 
 #TODO remove 
+sudo apt update && sudo apt install screen 
 mv /workspace/invokeai /workspace/invokeai_preexsiting 
 
 pip3 install virtualenv

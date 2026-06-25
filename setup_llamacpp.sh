@@ -21,5 +21,5 @@ cmake --build llama.cpp/build --config Release -j \
 cp llama.cpp/build/bin/llama-* llama.cpp/
 cd .. 
 cd CanvasDirector
-bash download_qwen_3.6_27b_q3.sh
+#bash download_qwen_3.6_27b_q3.sh
 bash download_qwen_3.5_9b_q8.sh

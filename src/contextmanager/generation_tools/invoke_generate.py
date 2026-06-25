@@ -90,8 +90,43 @@ class GenerationClient:
     def assign_mask_to_edit(self, mask): 
         self.api_client.images.upload_pil_image(image=mask, filename="image.png", board_id=self.board_id_mask_to_edit, image_category="mask")
 
+    def assign_canvas_entity(self, image_name, entity_type):
         """
+        entity_type: "raster_layer" | "inpaint_mask" 
+        """
+        self.ui_bridge.create_canvas_entity_from_image_name(entity_type, image_name)
+         
+    def update_canvas_dim(self, x_axis, y_axis): 
+        #TODO 
+        pass 
 
+    def set_generation_parameter(self, parameter, value):
+        #TODO 
+        #1- denoising 
+        self.ui_bridge.set_parameter(parameter, value) 
+    
+    def select_model(self, model_name):
+        #TODO 
+        pass 
+
+    def select_lora(self, lora_name):
+        #TODO 
+        pass 
+
+    def get_available_parameters(self):
+        #TODO 
+        pass 
+
+    def assign_output(self):
+        self.ui_bridge.save_selected_to_gallery(board_id = self.board_id_output)
+        pass 
+
+    def generate(self):
+        self.ui_bridge.invoke() 
+
+
+
+        """
         input_board_name = "My Board" 
         mask_path = "/workspace/invokeai/test_mask.png"  
         image_to_edit_id = api_client.boards.get_image_ids_by_board_name (input_board_name) 

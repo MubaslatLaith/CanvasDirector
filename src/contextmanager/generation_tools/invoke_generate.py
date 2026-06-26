@@ -53,18 +53,18 @@ class GenerationClient:
     
 
     def init_working_space(self, job_id):
-        self.board_name_image_to_edit = f'inpaint_image_job_{job_id}' 
-        self.board_name_mask_to_edit = f'inpaint_mask_job_{job_id}' 
+        #self.board_name_image_to_edit = f'inpaint_image_job_{job_id}' 
+        #self.board_name_mask_to_edit = f'inpaint_mask_job_{job_id}' 
         self.board_name_output = f'inpaint_output_job_{job_id}'
         
         self.clear_working_space() 
 
         #self.api_client.boards.create_board(self.board_name_image_to_edit) 
-        self.api_client.boards.create_board(self.board_name_mask_to_edit) 
+        #self.api_client.boards.create_board(self.board_name_mask_to_edit) 
         self.api_client.boards.create_board(self.board_name_output) 
 
         #self.board_id_image_to_edit = self.api_client.boards.get_board_by_name(self.board_name_image_to_edit)['board_id'] 
-        self.board_id_mask_to_edit = self.api_client.boards.get_board_by_name(self.board_name_mask_to_edit)['board_id']
+        #self.board_id_mask_to_edit = self.api_client.boards.get_board_by_name(self.board_name_mask_to_edit)['board_id']
         self.board_id_output = self.api_client.boards.get_board_by_name(self.board_name_output)['board_id']
 
 
@@ -72,7 +72,7 @@ class GenerationClient:
     def clear_working_space(self):
         try:
             #self.api_client.boards.delete_board_by_name(self.board_name_image_to_edit)
-            self.api_client.boards.delete_board_by_name(self.board_name_mask_to_edit)
+            #self.api_client.boards.delete_board_by_name(self.board_name_mask_to_edit)
             self.api_client.boards.delete_board_by_name(self.board_name_output) 
         except:
             pass 

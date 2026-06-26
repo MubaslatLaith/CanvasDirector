@@ -59,11 +59,11 @@ class GenerationClient:
         
         self.clear_working_space() 
 
-        self.api_client.boards.create_board(self.board_name_image_to_edit) 
+        #self.api_client.boards.create_board(self.board_name_image_to_edit) 
         self.api_client.boards.create_board(self.board_name_mask_to_edit) 
         self.api_client.boards.create_board(self.board_name_output) 
 
-        self.board_id_image_to_edit = self.api_client.boards.get_board_by_name(self.board_name_image_to_edit)['board_id'] 
+        #self.board_id_image_to_edit = self.api_client.boards.get_board_by_name(self.board_name_image_to_edit)['board_id'] 
         self.board_id_mask_to_edit = self.api_client.boards.get_board_by_name(self.board_name_mask_to_edit)['board_id']
         self.board_id_output = self.api_client.boards.get_board_by_name(self.board_name_output)['board_id']
 
@@ -71,7 +71,7 @@ class GenerationClient:
      
     def clear_working_space(self):
         try:
-            self.api_client.boards.delete_board_by_name(self.board_name_image_to_edit)
+            #self.api_client.boards.delete_board_by_name(self.board_name_image_to_edit)
             self.api_client.boards.delete_board_by_name(self.board_name_mask_to_edit)
             self.api_client.boards.delete_board_by_name(self.board_name_output) 
         except:
@@ -83,12 +83,20 @@ class GenerationClient:
     
     def assign_image_to_board(self, image_name, board_id):
         self.api_client.images.assign_image(image_name, board_id)
+    
 
-    def assign_image_to_edit(self, image_name):
-        self.api_client.images.assign_image(image_name, self.board_id_image_to_edit) 
+    #TODO return new image_name
+    def add_new_image_to_board(self, image, board_id, image_category):
+        self.api_client.images.upload_pil_image(image=image, filename="image.png", board_id=board_id, image_category=image_category)
 
-    def assign_mask_to_edit(self, mask): 
-        self.api_client.images.upload_pil_image(image=mask, filename="image.png", board_id=self.board_id_mask_to_edit, image_category="mask")
+    #def assign_new_image(self, image_name, board_id):
+    #    self.assign_new_image_to_board(image = mask, board_id = self.board_id_mask_to_edit, image_category="image") 
+    #    #self.api_client.images.assign_image(image_name, self.board_id_image_to_edit) 
+    
+    # TODO remove 
+    #def add_new_mask (self, mask): 
+    #    self.assign_new_image_to_board(image = mask, board_id = self.board_id_mask_to_edit, image_category="mask")
+        #self.api_client.images.upload_pil_image(image=mask, filename="image.png", board_id=self.board_id_mask_to_edit, image_category="mask")
 
     def assign_canvas_entity(self, image_name, entity_type):
         """
@@ -119,11 +127,12 @@ class GenerationClient:
 
     def assign_output(self):
         self.ui_bridge.save_selected_to_gallery(board_id = self.board_id_output)
+        self.ui_bridge.canvas_discard_all() 
         pass 
 
     def generate(self):
         self.ui_bridge.invoke() 
-
+        
 
 
         """

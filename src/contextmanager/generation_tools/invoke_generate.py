@@ -10,7 +10,7 @@ from contextmanager.uiclient.invokeai.upscaling_page import UpscalingPage
 
 from contextmanager.uiclient.invokeai.invoke_bridge import InvokeUIBridge
 from contextmanager.apiclient.invokeai.client import InvokeAIClient
-
+from contextmanager.generation_tools.invoke_generation_request import InvokeAIGenerationRequest 
 
 #generation_client = GenerationClient(INVOKE_URL, USERNAME, PASSWORD) 
 
@@ -87,8 +87,8 @@ class GenerationClient:
 
     #TODO return new image_name
     def add_new_image_to_board(self, image, board_id, image_category):
-        self.api_client.images.upload_pil_image(image=image, filename="image.png", board_id=board_id, image_category=image_category)
-
+        image_name = self.api_client.images.upload_pil_image(image=image, filename="image.png", board_id=board_id, image_category=image_category)
+        return image_name
     #def assign_new_image(self, image_name, board_id):
     #    self.assign_new_image_to_board(image = mask, board_id = self.board_id_mask_to_edit, image_category="image") 
     #    #self.api_client.images.assign_image(image_name, self.board_id_image_to_edit) 
@@ -133,6 +133,61 @@ class GenerationClient:
     def generate(self):
         self.ui_bridge.invoke() 
         
+
+
+    def run(self, generation_request: InvokeAIGenerationRequest):
+        #1 reset_generation settings (reset generation settings, clear canvas and  
+        self.reset_generation_settings()
+        #2 initialize working space (board_in_mask, board_out) 
+        self.init_working_space(generation_request.job_id)
+        #3 add reference images 
+        for reference_image in generation_request.reference_images:
+            self.assign_reference_image(reference_image)
+        #4 assign canvas raster layers (in order)
+        for base_image_name in generation_request.images_to_edit:
+            self.assign_canvas_entity(image_name = base_image_name, entity_type = "raster_layer")
+        #5 assign canvas mask  
+        for mask_name in generation_request.masks_to_edit:
+            self.assign_canvas_entity(image_name = mask_name, entity_type = "inpaint_mask")
+        #6 set generation parameters 
+        for parameter, value in generation_request.generation_parameters.model_dump(exclude_none=True).items():
+            self.set_generation_parameter(parameter, value)
+        self.generate()
+        #7 save output to gallery
+        # TODO modify to return image name of output image 
+        self.assign_output()
+        #8 wait for client state update 
+        with self.ui_bridge.wait_client_state_saved():
+            pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         """

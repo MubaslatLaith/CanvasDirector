@@ -3,13 +3,9 @@ import numpy as np
 import requests
 from PIL import Image
 from contextmanager.generation_tools.invoke_generate import GenerationClient 
+from contextmanager.generation_tools.invoke_generation_request import InvokeAIGenerationRequest, GenerationParameters
 
-
-class GenerationParameters:
-    def __init__(self):
-        prompt 
-
-
+#TODO 
 class GenerationState:
     def __init__(self):
         self.current_image_name = "" 
@@ -17,9 +13,6 @@ class GenerationState:
         self.current_objective = "" 
         self.issues = [] 
         self.generation_parameters 
-
-
-
 
 
 
@@ -52,91 +45,65 @@ references = []
 #initialize the generation_client
 generation_client = GenerationClient(INVOKE_URL, USERNAME, PASSWORD)
 
-from enum import Enum
-from typing import Any
-from pydantic import BaseModel, Field, ConfigDict
-from PIL import Image
-
-class GenerationMode(str, Enum):
-    TXT2IMG = "txt2img"
-    INPAINT = "inpaint"
-    REF2IMG = "ref2img"
-
-
-class GenerationParameters(BaseModel):
-    steps: int 
-    prompt: str
-
-class InvokeAIGenerationRequest(BaseModel):
-    job_id: str 
-    mode: GenerationMode
-    
-    # image names in invokai 
-    images_to_edit: list[str] = Field(default_factory=list)
-    masks_to_edit: list[str] = Field(default_factory=list)
-    reference_images: list[str] = Field(default_factory=list)
-    
-
-    parameters: GenerationParameters = Field(default_factory=GenerationParameters)
-
-
 
 #TODO create board and add image > return image name 
-board_name = "" 
+#TODO create masks board if it does not exist 
+board_name = "masks" 
 #TODO validate unique board name, if not add a number 
-generation_client.api_client.boards.create_board(board_name) 
+#generation_client.api_client.boards.create_board(board_name) 
+
+
+
 board_id = generation_client.api_client.boards.get_board_by_name(board_name)['board_id']
-generation_client.add_new_image_to_board(image=mask, board_id=, image_category="mask")
-mask_to_edit_name = generation_client.api_client.boards.get_image_ids_by_board_name(generation_client.board_name_mask_to_
-                                                                                    edit)[0]
+mask_name = generation_client.add_new_image_to_board(image=mask, board_id=board_id, image_category="mask")
+#mask_to_edit_name = generation_client.api_client.boards.get_image_ids_by_board_name(board_name)[0]
 
 
-inpaint_generation_request = InvokeAIGenerationRequest(mode = "inpaint", 
+t2i_generation_request = InvokeAIGenerationRequest(job_id = "t2i_test0",
+                                               generation_parameters = GenerationParameters(
+                                                   positive_prompt = "an airplane", 
+                                                   steps = steps,
+                                                   )
+                                                   )
+
+
+inpaint_generation_request = InvokeAIGenerationRequest(job_id = "inpaint_test0",
                                                images_to_edit = [image_to_edit_name], 
-                                               masks_to_edit = [mask_to_edit_name], 
-                                               GenerationParameters(
-                                                   prompt = prompt, 
+                                               masks_to_edit = [mask_name], 
+                                               generation_parameters = GenerationParameters(
+                                                   positive_prompt = "A male anime character jumping", 
                                                    steps = steps,
                                                    )
                                                )
 
+i2i_generation_request = InvokeAIGenerationRequest(job_id = "i2i_test0",
+                                                   images_to_edit = [image_to_edit_name],
+                                                   generation_parameters = GenerationParameters(
+                                                       positive_prompt = "Change image style to realistic",
+                                                       steps = steps,
+                                                       )
+                                                   )
+
+
+ref_generation_request = InvokeAIGenerationRequest(job_id = "ref2i_test0",
+                                                reference_images = [image_to_edit_name], 
+                                                generation_parameters = GenerationParameters(
+                                                    positive_prompt = "front view of the character",
+                                                    steps = steps,
+                                                    )
+                                                )
+
+ref_inpaint_generation_request = InvokeAIGenerationRequest(job_id = "ref2i_test0",
+                                                           generation_parameters = GenerationParameters(                 
+                                                                                positive_prompt = prompt,
+                                                                                steps = steps,
+                                                                                ) 
+                                                           )
 
 
 
 
-
-
-
-#inpaint_generation_request.mode = "inpaint" 
-#inpaint_generation_request.
-
-
-
-
-
-def run(generation_client, request: GenerationRequest):
-    #1 reset_generation settings 
-    generation_client.reset_generation_settings() 
-    #2 initialize working space (board_in_mask, board_out) 
-    generation_client.init_working_space(request.job_id) 
-    #3 add reference images 
-    for reference_image in request.reference_images:
-        generation_client.assign_reference_image(reference_image) 
-    #4 assign canvas raster layers (in order)
-    for image_name in response.images_to_edit:
-        generation_client.assign_canvas_entity(image_name = image_to_edit_name, entity_type = "raster_layer")
-    #5 assign canvas mask  
-    for mask_name in response.masks_to_edit:
-        generation_client.assign_canvas_entity(image_name = mask_name, entity_type = "inpaint_mask")
-    #6 set generation parameters 
-    for parameter, value in request.parameters.model_dump(exclude_none=True).items():
-            self.set_parameter(parameter, value)
-    generation_client.generate() 
-    # modify to return image name of output image 
-    generation_client.assign_output() 
-    # wait for client state update 
-    with generation_client.ui_bridge.wait_client_state_saved():
-        pass 
-
+inpaint_generation_request.job_id = "test2" 
+generation_client.run(inpaint_generation_request) 
 
 

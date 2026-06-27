@@ -12,7 +12,6 @@ from contextmanager.uiclient.invokeai.invoke_bridge import InvokeUIBridge
 from contextmanager.apiclient.invokeai.client import InvokeAIClient
 from contextmanager.generation_tools.invoke_generation_request import InvokeAIGenerationRequest 
 
-#generation_client = GenerationClient(INVOKE_URL, USERNAME, PASSWORD) 
 
 class GenerationClient:
     def __init__ (self, INVOKE_URL, USERNAME, PASSWORD):
@@ -53,26 +52,18 @@ class GenerationClient:
     
 
     def init_working_space(self, job_id):
-        #self.board_name_image_to_edit = f'inpaint_image_job_{job_id}' 
-        #self.board_name_mask_to_edit = f'inpaint_mask_job_{job_id}' 
         self.board_name_output = f'inpaint_output_job_{job_id}'
         
         self.clear_working_space() 
 
-        #self.api_client.boards.create_board(self.board_name_image_to_edit) 
-        #self.api_client.boards.create_board(self.board_name_mask_to_edit) 
         self.api_client.boards.create_board(self.board_name_output) 
 
-        #self.board_id_image_to_edit = self.api_client.boards.get_board_by_name(self.board_name_image_to_edit)['board_id'] 
-        #self.board_id_mask_to_edit = self.api_client.boards.get_board_by_name(self.board_name_mask_to_edit)['board_id']
         self.board_id_output = self.api_client.boards.get_board_by_name(self.board_name_output)['board_id']
 
 
      
     def clear_working_space(self):
         try:
-            #self.api_client.boards.delete_board_by_name(self.board_name_image_to_edit)
-            #self.api_client.boards.delete_board_by_name(self.board_name_mask_to_edit)
             self.api_client.boards.delete_board_by_name(self.board_name_output) 
         except:
             pass 
@@ -83,21 +74,11 @@ class GenerationClient:
     
     def assign_image_to_board(self, image_name, board_id):
         self.api_client.images.assign_image(image_name, board_id)
-    
 
-    #TODO return new image_name
     def add_new_image_to_board(self, image, board_id, image_category):
         image_name = self.api_client.images.upload_pil_image(image=image, filename="image.png", board_id=board_id, image_category=image_category)
         return image_name
-    #def assign_new_image(self, image_name, board_id):
-    #    self.assign_new_image_to_board(image = mask, board_id = self.board_id_mask_to_edit, image_category="image") 
-    #    #self.api_client.images.assign_image(image_name, self.board_id_image_to_edit) 
     
-    # TODO remove 
-    #def add_new_mask (self, mask): 
-    #    self.assign_new_image_to_board(image = mask, board_id = self.board_id_mask_to_edit, image_category="mask")
-        #self.api_client.images.upload_pil_image(image=mask, filename="image.png", board_id=self.board_id_mask_to_edit, image_category="mask")
-
     def assign_canvas_entity(self, image_name, entity_type):
         """
         entity_type: "raster_layer" | "inpaint_mask" 
@@ -162,91 +143,4 @@ class GenerationClient:
         output_image_name = self.api_client.boards.get_image_ids_by_board_name(self.board_name_output)[0]
         return output_image_name 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        """
-        input_board_name = "My Board" 
-        mask_path = "/workspace/invokeai/test_mask.png"  
-        image_to_edit_id = api_client.boards.get_image_ids_by_board_name (input_board_name) 
-        image_to_edit_id = image_to_edit_id[0] 
-        print(image_to_edit_id)   
-        
-        
-
-
-        # assign image to board 
-        #api_client.images.assign_image(image_id = image_to_edit_id, board_id = board_id_image_to_edit)
-        # upload mask to board 
-        api_client.images.upload_image(image_path = mask_path, board_id = board_id_mask_to_edit, image_category = "mask") 
-
-        
-        
-        #TODO modify to take board name
-        image_name = image_to_edit_id#api_client. 
-        mask_name = api_client.boards.get_image_ids_by_board_name(board_name_mask_to_edit)[0] 
-
-        bridge.create_canvas_entity_from_image_name("raster_layer", image_name)
-        bridge.create_canvas_entity_from_image_name("inpaint_mask", mask_name )
-        
-
-        bridge.set_parameter("steps", 7)
-        with bridge.wait_client_state_saved():
-            bridge.set_parameter("positive_prompt", "fix hand, hand should have 5 fingers and should be wide open. Hands should have correct anatomy") 
-
-        bridge.invoke()
-
-        #with bridge.wait_client_state_saved():
-        bridge.save_selected_to_gallery(board_id = board_id_output)
-        bridge.canvas_discard_all() 
-        with bridge.wait_client_state_saved():
-            pass 
-
-        return 
-
-
-
-
-        """     
-
-    # cleanup 
-        """ 
-        """
-
-
-        """
-
-    image_to_edit_id = api_client.boards.get_image_ids_by_board_name (board_name_image_to_edit)
-    mask_to_edit_id = api_client.boards.get_image_ids_by_board_name (board_name_mask_to_edit) 
-
-    print(image_to_edit_id)
-    print(mask_to_edit_id)
-
-        """
 

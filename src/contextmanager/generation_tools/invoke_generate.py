@@ -159,7 +159,8 @@ class GenerationClient:
         #8 wait for client state update 
         with self.ui_bridge.wait_client_state_saved():
             pass
-
+        output_image_name = self.api_client.boards.get_image_ids_by_board_name(self.board_name_output)[0]
+        return output_image_name 
 
 
 

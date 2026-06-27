@@ -93,7 +93,10 @@ ref_generation_request = InvokeAIGenerationRequest(job_id = "ref2i_test0",
                                                     )
                                                 )
 
-ref_inpaint_generation_request = InvokeAIGenerationRequest(job_id = "ref2i_test0",
+ref_inpaint_generation_request = InvokeAIGenerationRequest(job_id = "ref2i_inpaint_test0",
+                                                           images_to_edit = [image_to_edit_name], 
+                                                           reference_images = [image_to_edit_name],
+                                                           mask_to_edit = [mask_name], 
                                                            generation_parameters = GenerationParameters(                 
                                                                                 positive_prompt = prompt,
                                                                                 steps = steps,
@@ -103,7 +106,20 @@ ref_inpaint_generation_request = InvokeAIGenerationRequest(job_id = "ref2i_test0
 
 
 
-inpaint_generation_request.job_id = "test2" 
-generation_client.run(inpaint_generation_request) 
+#inpaint_generation_request.job_id = "test2" 
+
+output_image = generation_client.run(inpaint_generation_request) 
+print('_______') 
+output_image = generation_client.run(t2i_generation_request) 
+print('_______') 
+output_image = generation_client.run(i2i_generation_request) 
+print('_______')
+output_image = generation_client.run(ref_generation_request)
+print('_______') 
+output_image = generation_client.run(ref_inpaint_generation_request) 
+
+
+
+
 
 

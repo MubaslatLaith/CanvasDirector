@@ -1,2 +1,2 @@
 source ../cpp/.venv/bin/activate
-python ./test_unsloth/download_qwen.py 
+python ./unsloth_examples/download_qwen.py 

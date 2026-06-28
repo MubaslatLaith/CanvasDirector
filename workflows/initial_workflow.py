@@ -44,7 +44,7 @@ qa = QAAgent(base_url=base_url,api_key=api_key,)
 
 
 mage_to_edit_name = "eafd3ae3-2ab0-477d-80ce-13089655d595.png"
-mask = Image.open('/workspace/CanvasDirector/sam3_mask0.png')
+#mask = Image.open('/workspace/CanvasDirector/sam3_mask0.png')
 
 """
 generation_request = InvokeAIGenerationRequest(job_id = "ref2i_inpaint_test0",
@@ -58,163 +58,149 @@ generation_request = InvokeAIGenerationRequest(job_id = "ref2i_inpaint_test0",
                          )
 """
 
-issue = "in image aa2da replace the character on the left with the character in image 1412 and the character on the right with the character in image aa21sa, the poses should be identical to the poses in image aa2da" #"fix left hand in image 7124axa2a" #"generate an image of an anime character jumping" 
-
-system_prompt = "" 
-system_prompt += """You are an image editing planner.
-
-Your task is to convert a user's image editing request into a sequence of executable operations.
-
-You do not execute operations.
-You only produce a plan.
-
-Planning guidelines:
-    - Produce the simplest valid plan that accomplishes the requested edit.
-    - Break complex tasks into multiple operations when necessary.
-    - Preserve dependencies between operations.
-    - Reuse existing images whenever possible.
-    - Only use the operations and fields that are available.
-    - Do not invent unsupported operations.
-    - Do not invent image names or outputs that cannot be produced by previous operations.
-    - If an operation requires the output of a previous operation, express that dependency explicitly.
-
-    Return only valid JSON following the required schema.
-
-    If no valid plan can be produced using the available operations, return:
-
-    {
-      "success": false,
-        "reason": "<brief explanation>",
-          "operations": []
-          }"""
-
-system_prompt += """\n Operation: generation_request
-
-Arguments:
-    - job_id: string
-    - raster_images: list[string]
-    - reference_images: list[string]
-    - mask_to_edit: list[string]
-    - generation_parameters:
-            positive_prompt: string
-            steps: integer
-Behavior:
-    - If mask_to_edit is non-empty, performs localized inpainting.
-    - If mask_to_edit is empty, edits the entire image.
-    - reference_images are used as guidance.
-    - raster_images are placed on top of one another with the latest taking priority""" 
-
-system_prompt += """\n Available operations
-
-Operation: segment
-
-Arguments:
-    - image_name: string
-    - segmentation_prompt: string
-
-    Returns:
-    - output_name (mask image)"""
 
 
-system_prompt = """
-You are a planning feature classifier for an image editing system.
 
-Your job is to analyze the user request and current task context, then return structured planning features that help route the task.
 
-You do not create an edit plan.
-You do not call tools.
-You do not execute operations.
+
+planner_flags = {
+    "has_base": {
+        "question": "Does the request include an existing base image that should be edited or preserved?",
+        "type": "boolean"
+    },
+
+    "has_ref": {
+        "question": "Does the request include one or more reference images?",
+        "type": "boolean"
+    },
+
+    "localized_edit": {
+        "question": "Is the requested change localized to one or more specific regions of the base image?",
+        "type": "boolean"
+    }, 
+    "multiple_localized_edits": {
+        "question": "Does it require edits over multiple segments?", 
+        "type": "boolean"    
+    },
+    "segmentable": {
+        "question": "Can each localized region likely be isolated using segmentation or masking?",
+        "type": "boolean"
+    },
+
+    "needs_ref": {
+        "question": "Is a reference image actually required to perform the requested edit?",
+        "type": "boolean"
+    },
+
+    "can_be_completed_in_single_generation": {
+        "question": "Should be False if multiple localized edits is True.Can the entire request likely be completed reliably in a single image generation job?",
+        "type": "boolean"
+    },
+
+    "requires_multiple_independent_jobs": {
+        "question": "If multiple generation jobs are required, can they be executed independently without relying on the output of another job?",
+        "type": "boolean"
+    },
+
+    "requires_multiple_dependent_jobs": {
+        "question": "Should be True if multiple localized edits is True. If multiple generation jobs are required, do one or more jobs depend on the output of previous jobs and therefore require sequential execution?",
+        "type": "boolean"
+    }
+}
+
+
+import json
+
+planner_flag_descriptions = "\n".join(
+    f'- {key}: {value["question"]}'
+    for key, value in planner_flags.items()
+)
+
+json_schema = {
+    key: "true/false" if value["type"] == "boolean" else value["type"]
+    for key, value in planner_flags.items()
+}
+
+json_schema["reasoning"] = {
+    key: "brief reason"
+    for key in planner_flags
+}
+
+system_prompt = f"""
+You are a workflow-state classifier for an image generation planner.
 
 Answer only with valid JSON.
 
-Classify only what can be inferred from the request and provided context.
-Do not invent missing images, masks, references, or capabilities.
+Your job is not to choose tools directly.
+Your job is to answer decision questions about the user's request.
 
-Important:
-    - Deterministic facts such as whether images or references were provided may be included in the context.
-    - If a value is already provided in the context, use it.
-    - If a value cannot be determined, use null.
-    - Use booleans for yes/no features.
-    - Keep explanations short.
+Definitions:
+- base image: an existing image that should be edited, preserved, or used as the main composition.
+- reference image: an additional image used as guidance for identity, style, pose, object appearance, or content.
+- localized edit: a change affecting a specific object, region, body part, or small set of regions.
+- segmentable: the target can likely be isolated with a mask.
+- non-localized/global edit: the whole image changes.
 
-    Return schema:
+Answer the following questions:
 
-    {
-      "modify_preexisting": boolean | null,
-        "has_references": boolean | null,
-          "localized_edit": boolean | null,
-            "target_exists": boolean | null,
-              "segmentable": boolean | null,
-                "multiple_regions": boolean | null,
-                  "sequential_required": boolean | null,
-                    "needs_reference_guidance": boolean | null,
-                      "requires_full_regeneration": boolean | null,
-                        "reason": {
-                            "modify_preexisting": string,
-                                "has_references": string,
-                                    "localized_edit": string,
-                                        "target_exists": string,
-                                            "segmentable": string,
-                                                "multiple_regions": string,
-                                                    "sequential_required": string,
-                                                        "needs_reference_guidance": string,
-                                                            "requires_full_regeneration": string
-                                                              }
-                                                              }
+{planner_flag_descriptions}
 
-                                                              Feature meanings:
+Return JSON matching this schema:
 
-                                                              - modify_preexisting:
-                                                                True if there is an existing base image to edit.
+{json.dumps(json_schema, indent=2)}
+"""
 
-                                                                - has_references:
-                                                                  True if one or more reference images are provided.
 
-                                                                  - localized_edit:
-                                                                    True if the requested change can be made within a bounded image region while leaving the rest unchanged.
 
-                                                                    - target_exists:
-                                                                      True if the object or region to modify already exists in the base image.
-
-                                                                      - segmentable:
-                                                                        True if the target object or region can likely be selected with a text segmentation prompt.
-
-                                                                        - multiple_regions:
-                                                                          True if the task requires modifying more than one separate object or region or entity.
-
-                                                                          - sequential_required:
-                                                                            True if edits should be applied one after another because later edits should use the result of earlier edits.
-
-                                                                            - needs_reference_guidance:
-                                                                              True if the task requires reference images for identity, appearance, pose, style, or object guidance.
-
-                                                                              - requires_full_regeneration:
-                                                                                True if the request cannot be completed with localized masked edits and likely requires modifying or regenerating the whole image.
-
-                                                                                Rules:
-                                                                                - Do not output a plan.
-                                                                                - Do not output operations.
-                                                                                - Do not recommend tools.
-                                                                                - Do not assume a region is segmentable if it is abstract, missing, hidden, or not visually present.
-                                                                                - If localized_edit is false, segmentable should usually be false.
-                                                                                - If target_exists is false, segmentable should usually be false.
-                                                                                - If multiple independent regions are edited on the same base image, sequential_required is usually true unless the system can merge outputs.
-                                                                                - If the request says replace an object/person with a reference, needs_reference_guidance is true.
-                                                                                """
-
+issue = "in image aa2da replace the character on the left with the character in image 1412 and the character on the right with the character in image aa21sa, the poses should be identical to the poses in image aa2da" #"fix left hand in image 7124axa2a" #"generate an image of an anime character jumping" 
 
 prompt = f"\n\nIssue:\n{issue} \no_think"
 
-
-
-system_prompt = "break the task into seperate tasks, each task should address a single region"
-
-
-prompt = f'{system_prompt}\n {prompt}'
-
-
+prompt = f"{system_prompt} {prompt}"
 
 result = planner.run(prompt) 
+
+import pdb; pdb.set_trace() 
+
+
+class GenerationWorkflow:
+    def __init__(self):
+        pass 
+
+class WorkflowPlanner:
+    def __init__(self, state):
+        self.state = state
+        
+        #self.build_workflows() 
+        pass 
+    
+    def validate_state(self):
+
+        multiple_job_validation = state["can_be_completed_in_single_generation"] == (
+                state["requires_multiple_dependent_jobs"] or state["requires_multiple_independent_jobs"])
+
+        
+    def build_single_job_workflow(self):
+        pass
+
+
+    def build_workflows(self):
+        if not state["can_be_completed_in_single_generation"]: 
+            if state["requires_multiple_dependent_jobs"]:
+                pass
+                #TODO request that issue is broken down and that generation jobs are provided in order 
+                #return 
+                # build jobs per issue with dependency 
+                
+                    
+
+            if state["requires_multiple_independent_jobs"]: 
+                pass
+                #TODO request the issue is broken down in the independent jobs
+                # build jobs per issue without dependency 
+
+        
+            
 
 
 

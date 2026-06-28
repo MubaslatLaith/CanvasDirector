@@ -9,9 +9,11 @@ class PlannerAgent(BaseAgent):
         return "planner"
 
     def run(self, issue):
-        response = self.complete(
-                f"Create an editing plan to resolve the following issue.\n\nIssue:\n{issue} \no_think"
-                )
+        response = self.complete(issue) 
+        #response = self.complete(
+        #        f"Create an executable image editing plan to resolve the following issue.\n\nIssue:\n{issue} \no_think"
+        #        )
+        #import pdb; pdb.set_trace() 
         content = response.choices[0].message.content
         return self._parse_json(content) #json.loads(response)
 

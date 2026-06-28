@@ -93,7 +93,7 @@ planner_flags = {
     },
 
     "can_be_completed_in_single_generation": {
-        "question": "Should be False if multiple localized edits is True.Can the entire request likely be completed reliably in a single image generation job?",
+        "question": "Should be False if multiple localized edits is True.Can the entire request likely be completed reliably in a single image generation job? If multiple simple generations are needed then should be False.",
         "type": "boolean"
     },
 
@@ -152,7 +152,10 @@ Return JSON matching this schema:
 
 
 
-issue = "in image aa2da replace the character on the left with the character in image 1412 and the character on the right with the character in image aa21sa, the poses should be identical to the poses in image aa2da" #"fix left hand in image 7124axa2a" #"generate an image of an anime character jumping" 
+#issue = "in image aa2da replace the character on the left with the character in image 1412 and the character on the right with the character in image aa21sa, the poses should be identical to the poses in image aa2da" #"fix left hand in image 7124axa2a" #"generate an image of an anime character jumping" 
+
+issue = "generate 3 images of a dragon"
+issue = "generate an image of a dragon and another image of  a knight" 
 
 prompt = f"\n\nIssue:\n{issue} \no_think"
 
@@ -176,8 +179,13 @@ class WorkflowPlanner:
     
     def validate_state(self):
 
-        multiple_job_validation = state["can_be_completed_in_single_generation"] == (
-                state["requires_multiple_dependent_jobs"] or state["requires_multiple_independent_jobs"])
+        multiple_job_validation = state["can_be_completed_in_single_generation"] != (
+                state["requires_multiple_dependent_jobs"] 
+                or 
+                state["requires_multiple_independent_jobs"]
+                )
+        
+        multiple_segments_validation = state["can_be_completed_in_single_generation"] != state["multiple_localized_edits"]
 
         
     def build_single_job_workflow(self):

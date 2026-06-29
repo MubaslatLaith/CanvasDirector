@@ -149,6 +149,36 @@ Return JSON matching this schema:
 
 {json.dumps(json_schema, indent=2)}
 """
+#TODO move to PlannerAgent
+def validate_planner_flags(planner_flags):
+    multiple_job_validation = planer_flags["can_be_completed_in_single_generation"] != (
+            planner_flags["requires_multiple_dependent_jobs"]
+            or
+            planner_flags["requires_multiple_independent_jobs"]
+            )
+    
+    multiple_segments_validation = planner_flags["can_be_completed_in_single_generation"] != planner_flags["multiple_localized_edits"]
+    
+
+def break_generation_job(planner, issue, planner_flags):
+    if not planner_flags["can_be_completed_in_single_generation"]:
+        
+        prompt = "this job can be broken down into multiple "
+        
+        if state["requires_multiple_dependent_jobs"]:
+            prompt += "dependent jobs\n"
+            prompt += "break down the task into a list of dependent jobs, return the list of the dependent jobs in order of execution"
+        
+        if state["requires_multiple_independent_jobs"]: 
+            prompt += "independent jobs"
+            prompt += "break down the task into a list of independent jobs, return the list of the independent jobs" 
+
+        
+        result = planner.run(prompt)
+
+        return result 
+
+
 
 
 
@@ -161,35 +191,37 @@ prompt = f"\n\nIssue:\n{issue} \no_think"
 
 prompt = f"{system_prompt} {prompt}"
 
-result = planner.run(prompt) 
+
+#TODO create multiple system.md files per task 
+#TODO change run to get planner flags
+planner_flags = planner.run(prompt) 
+validate_planner_flags(planner_flags) 
+sub_issues = break_generation_job(planner, planner_flags) 
+
+
+
+
 
 import pdb; pdb.set_trace() 
 
 
-class GenerationWorkflow:
-    def __init__(self):
-        pass 
 
-class WorkflowPlanner:
-    def __init__(self, state):
-        self.state = state
-        
-        #self.build_workflows() 
-        pass 
+
+
+
+
+
+
+
+
+
+
+
+
+
     
-    def validate_state(self):
-
-        multiple_job_validation = state["can_be_completed_in_single_generation"] != (
-                state["requires_multiple_dependent_jobs"] 
-                or 
-                state["requires_multiple_independent_jobs"]
-                )
-        
-        multiple_segments_validation = state["can_be_completed_in_single_generation"] != state["multiple_localized_edits"]
 
         
-    def build_single_job_workflow(self):
-        pass
 
 
     def build_workflows(self):

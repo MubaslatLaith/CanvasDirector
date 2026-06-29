@@ -15,11 +15,11 @@ class PlannerAgent(BaseAgent):
         #        )
         #import pdb; pdb.set_trace() 
         content = response.choices[0].message.content
-        return self._parse_json(content) #json.loads(response)
+        return self._parse_json(content) #, response #json.loads(response)
 
     def _parse_json(self, content):
-        if isinstance(content, dict):
-            return content
+        #if isinstance(content, dict):
+        #    return content
         try:
             return json.loads(content)
         except json.JSONDecodeError:

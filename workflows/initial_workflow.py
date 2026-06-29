@@ -98,12 +98,12 @@ planner_flags = {
     },
 
     "requires_multiple_independent_jobs": {
-        "question": "If multiple generation jobs are required, can they be executed independently without relying on the output of another job?",
+        "question": "Should be False if multiple_localized_edits is True. If multiple generation jobs are required, can they be executed independently without relying on the output of another job?",
         "type": "boolean"
     },
 
     "requires_multiple_dependent_jobs": {
-        "question": "Should be True if multiple localized edits is True. If multiple generation jobs are required, do one or more jobs depend on the output of previous jobs and therefore require sequential execution?",
+        "question": "Should be True if multiple_localized_edits is True. If multiple generation jobs are required, do one or more jobs depend on the output of previous jobs and therefore require sequential execution?",
         "type": "boolean"
     }
 }
@@ -117,7 +117,7 @@ planner_flag_descriptions = "\n".join(
 )
 
 json_schema = {
-    key: "true/false" if value["type"] == "boolean" else value["type"]
+    key: "boolean" if value["type"] == "boolean" else value["type"]
     for key, value in planner_flags.items()
 }
 
@@ -149,34 +149,108 @@ Return JSON matching this schema:
 
 {json.dumps(json_schema, indent=2)}
 """
+
+
+
 #TODO move to PlannerAgent
 def validate_planner_flags(planner_flags):
-    multiple_job_validation = planer_flags["can_be_completed_in_single_generation"] != (
+    validation = {} 
+
+    validation["multiple_job_validation"] = planner_flags["can_be_completed_in_single_generation"] != (
             planner_flags["requires_multiple_dependent_jobs"]
             or
             planner_flags["requires_multiple_independent_jobs"]
             )
     
-    multiple_segments_validation = planner_flags["can_be_completed_in_single_generation"] != planner_flags["multiple_localized_edits"]
+    validation["multiple_segments_validation"] = planner_flags["can_be_completed_in_single_generation"] != planner_flags["multiple_localized_edits"]
+    
     
 
+
+
 def break_generation_job(planner, issue, planner_flags):
-    if not planner_flags["can_be_completed_in_single_generation"]:
-        
-        prompt = "this job can be broken down into multiple "
-        
-        if state["requires_multiple_dependent_jobs"]:
-            prompt += "dependent jobs\n"
-            prompt += "break down the task into a list of dependent jobs, return the list of the dependent jobs in order of execution"
-        
-        if state["requires_multiple_independent_jobs"]: 
-            prompt += "independent jobs"
-            prompt += "break down the task into a list of independent jobs, return the list of the independent jobs" 
 
+    if planner_flags["can_be_completed_in_single_generation"]:
+        return [issue] 
         
-        result = planner.run(prompt)
+    dependent = planner_flags["requires_multiple_dependent_jobs"]
+    independent = planner_flags["requires_multiple_independent_jobs"]
 
-        return result 
+
+    if dependent and independent:
+        job_type = "dependent and independent jobs"
+        
+        instruction = (
+                "Break the task into groups of jobs. "
+                "Return ordered dependent chains where dependencies exist, "
+                "and separate independent jobs where jobs can run in parallel."
+                                                                                                    )
+    elif dependent:
+        job_type = "dependent jobs"
+        
+        instruction = (
+                "Break down the task into a list of dependent jobs. "
+                "Return them in execution order."
+                )
+        
+    elif independent:
+        job_type = "independent jobs"
+        
+        instruction = (
+                "Break down the task into a list of independent jobs. "
+                "Return jobs that can be executed independently."
+                )
+               
+
+
+
+    prompt = f"""
+    issue: {issue}
+                  
+    This job cannot be completed in a single generation.
+    
+    It should be broken down into multiple {job_type}.
+
+    {instruction}
+
+    Return JSON only.
+    
+    Each job should include:
+    
+    - id: job id for the single generation job
+    - instruction: single generation job instruction, should reference the "(job_id)" for all image inputs that depends on another job.
+    - depends_on: job ids 
+    
+    """.strip()
+
+                                                                                                                    
+    return planner.run(prompt)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -184,8 +258,30 @@ def break_generation_job(planner, issue, planner_flags):
 
 #issue = "in image aa2da replace the character on the left with the character in image 1412 and the character on the right with the character in image aa21sa, the poses should be identical to the poses in image aa2da" #"fix left hand in image 7124axa2a" #"generate an image of an anime character jumping" 
 
-issue = "generate 3 images of a dragon"
-issue = "generate an image of a dragon and another image of  a knight" 
+#issue = "generate 3 images of a dragon"
+#issue = "generate an image of a dragon and another image of  a knight" 
+
+#issue = "generate an image of a male tall character, then use the image to generate 3 dynamic poses of the same character" 
+
+
+#issue = "generate an image of a character smiling, generate an image of the same character with an angry expression, generate an image of a mountain range. Use the mountain range image as the background for the angry character"#"generate an image of a character smiling,then generate an image changing the expression of the character to anger and then put in an image that has a mountain background" 
+
+issue = """
+    In im0, keep the room, lighting, camera angle, and both characters’ identities the same.
+
+    Change the seated woman’s outfit to match the red dress in im1, but keep her current pose and facial expression.
+
+    Replace the standing man’s head with the person from im2, but preserve the man’s body, suit, pose, and lighting.
+
+    Add the small black dog from im3 sitting on the floor between them, scaled naturally and casting a believable shadow.
+
+    Also remove the coffee cup from the table.
+
+    Do not change anything else.
+"""
+
+issue = "In job_2, add the small black dog from im3 sitting on the floor between them, scaled naturally and casting a believable shadow, and remove the coffee cup from the table."
+
 
 prompt = f"\n\nIssue:\n{issue} \no_think"
 
@@ -195,8 +291,9 @@ prompt = f"{system_prompt} {prompt}"
 #TODO create multiple system.md files per task 
 #TODO change run to get planner flags
 planner_flags = planner.run(prompt) 
+
 validate_planner_flags(planner_flags) 
-sub_issues = break_generation_job(planner, planner_flags) 
+sub_issues = break_generation_job(planner, issue, planner_flags) 
 
 
 
@@ -222,28 +319,6 @@ import pdb; pdb.set_trace()
     
 
         
-
-
-    def build_workflows(self):
-        if not state["can_be_completed_in_single_generation"]: 
-            if state["requires_multiple_dependent_jobs"]:
-                pass
-                #TODO request that issue is broken down and that generation jobs are provided in order 
-                #return 
-                # build jobs per issue with dependency 
-                
-                    
-
-            if state["requires_multiple_independent_jobs"]: 
-                pass
-                #TODO request the issue is broken down in the independent jobs
-                # build jobs per issue without dependency 
-
-        
-            
-
-
-
 
 
 
